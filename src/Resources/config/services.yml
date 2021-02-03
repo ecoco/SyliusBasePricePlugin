@@ -1,0 +1,35 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Ecocode\SyliusBasePricePlugin\Form\Type\BasePriceUnitChoiceType: ~
+
+    UnitConverter\UnitConverter:
+        factory: ['Ecocode\SyliusBasePricePlugin\Services\ConverterFactory', 'createUnitConverter']
+        arguments: ['%ecocode_sylius_base_price.measurements%']
+
+    Ecocode\SyliusBasePricePlugin\Services\Calculator:
+        calls:
+            - setMappingConfig: ['%ecocode_sylius_base_price.mapping%']
+            - setUseShortUnitName: ['%ecocode_sylius_base_price.use_short_unit_name%']
+
+    Sylius\Bundle\MoneyBundle\Templating\Helper\FormatMoneyHelper: ~
+
+    Ecocode\SyliusBasePricePlugin\Services\Helper\ProductVariantsBasePriceExtension:
+        tags: ['twig.extension']
+
+    Ecocode\SyliusBasePricePlugin\Form\Extension\ProductVariantTypeExtension:
+        tags:
+            - name: form.type_extension
+              extended_type: Sylius\Bundle\ProductBundle\Form\Type\ProductVariantType
+              priority: -5
+
+    Ecocode\SyliusBasePricePlugin\Menu\AdminProductVariantFormMenuListener:
+        tags:
+            - name: kernel.event_listener
+              event: sylius.menu.admin.product_variant.form
+              method: addItems
+

@@ -1,0 +1,50 @@
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var ecocodeBasePricePluginSelector = '[name*="sylius_add_to_cart[cartItem][variant]"]';
+
+        function ecocodeBasePricePluginDraw() {
+            const el = $('#product-price-base_price');
+            if ('undefined' !== typeof el) {
+                const texts = JSON.parse(el.attr('data-base-price-text'));
+                const size = texts.length;
+                if (!size) {
+                    return;
+                }
+
+                let selectedVariantIndex;
+                if (size === 1) {
+                    // single product
+                    selectedVariantIndex = 0;
+                } else {
+                    // "choice" variantSelectionMethod
+                    let selected = $(ecocodeBasePricePluginSelector + ':checked');
+                    if (selected.length) {
+                        selectedVariantIndex = selected.attr('id').split('_').pop();
+                    } else {
+                        // match variantSelectionMethod
+                        const options = $(ecocodeBasePricePluginSelector + ' option');
+                        for (const option in options) {
+                            if (options.hasOwnProperty(option)) {
+                                if (options[option].selected) {
+                                    selectedVariantIndex = option;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (selectedVariantIndex in texts) {
+                    el.html(texts[selectedVariantIndex]);
+                }
+            }
+        }
+
+        const ecocodeBasePricePluginEl = $(ecocodeBasePricePluginSelector);
+        if ('undefined' !== typeof ecocodeBasePricePluginEl) {
+            ecocodeBasePricePluginEl.on('change', ecocodeBasePricePluginDraw);
+            ecocodeBasePricePluginDraw();
+        }
+    });
+</script>

@@ -1,0 +1,33 @@
+sylius_ui:
+    events:
+
+        # inject html into product detail page
+        sylius.shop.product.show.right_sidebar:
+            blocks:
+                base_price:
+                    template: '@EcocodeSyliusBasePricePlugin/Shop/Product/Show/baseprice.html.twig'
+                    priority: 29
+
+        # inject html into cart
+        sylius.shop.cart.items:
+            blocks:
+                content:
+                    template: '@EcocodeSyliusBasePricePlugin/Shop/Cart/Summary/_items.html.twig'
+
+        # js and css
+        sylius.shop.layout.javascripts:
+            blocks:
+                base_price: '@EcocodeSyliusBasePricePlugin/Shop/baseprice_js.html.twig'
+
+        sylius.shop.layout.stylesheets:
+            blocks:
+                base_price:
+                    template: '@EcocodeSyliusBasePricePlugin/Shop/baseprice_css.html.twig'
+
+ecocode_sylius_base_price:
+    use_short_unit_name: true
+    mapping:
+        UnitConverter\Measure::MASS:
+            - { unit: UnitConverter\Unit\Mass\Gram, mod: 100 }
+        UnitConverter\Measure::VOLUME:
+            - { unit: UnitConverter\Unit\Volume\Millilitre, mod: 100 }

@@ -1,0 +1,8 @@
+<div class="ui tab" data-tab="base_price">
+    <h3 class="ui dividing header">{{ 'ecocode_sylius_base_price_plugin.admin.tab'|trans }}</h3>
+
+    {{ form_row(form.basePriceUnit) }}
+    {{ form_row(form.basePriceValue) }}
+
+    {{ sonata_block_render_event('sylius.admin.product_variant.' ~ action ~ '.tab_deposit', {'form': form}) }}
+</div>
