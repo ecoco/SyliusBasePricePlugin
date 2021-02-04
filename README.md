@@ -4,109 +4,118 @@
     </a>
 </p>
 
-<h1 align="center">Plugin Skeleton</h1>
+<h1 align="center">Ecocode Sylius Base Price Plugin</h1>
 
-<p align="center">Skeleton for starting Sylius plugins.</p>
+<p align="center">Plugin that calculates and shows product base price.</p>
 
 ## Documentation
 
-For a comprehensive guide on Sylius Plugins development please go to Sylius documentation,
-there you will find the <a href="https://docs.sylius.com/en/latest/plugin-development-guide/index.html">Plugin Development Guide</a>, that is full of examples.
+Sylius Base Price Plugin allows you to add extra information to your shop about product base price. 
+After installation you will need to set up product variable mass or volume or other unit.
+This value will be used to calculate base unit price and will show up in product detail page and cart.
 
-## Quickstart Installation
+## Features
 
-1. Run `composer create-project sylius/plugin-skeleton ProjectName`.
+* Installs base_price_unit and base_price_value columns in sylius_product_variant table.
+* "Base Price" tab in admin product variant page
+* Base price display in product detail page
+* Base price display in cart for each product
 
-2. From the plugin skeleton root directory, run the following commands:
+## Installation
 
-    ```bash
-    $ (cd tests/Application && yarn install)
-    $ (cd tests/Application && yarn build)
-    $ (cd tests/Application && APP_ENV=test bin/console assets:install public)
-    
-    $ (cd tests/Application && APP_ENV=test bin/console doctrine:database:create)
-    $ (cd tests/Application && APP_ENV=test bin/console doctrine:schema:create)
-    ```
+### Download and install
 
-To be able to setup a plugin's database, remember to configure you database credentials in `tests/Application/.env` and `tests/Application/.env.test`.
+```shell
+composer require ecoco/sylius-base-price-plugin
+```
+
+### Enable plugin 
+
+Register the plugin by adding it to your `config/bundles.php` file
+
+```php
+return [
+    // ...
+    Ecocode\SyliusBasePricePlugin\EcocodeSyliusBasePricePlugin::class => ['all' => true],
+];
+```
+
+
+### Configure
+
+```shell
+# config/packages/ecocode_sylius_base_price_plugin.yaml
+
+imports:
+    - { resource: "@EcocodeSyliusBasePricePlugin/Resources/config/config.yaml" }
+```
+
+### Extend `ProductVariant` entity
+
+Add trait and interface to existing entity.
+
+```php
+<?php
+# src/Entity/Product/ProductVariant.php
+declare(strict_types=1);
+
+namespace App\Entity\Product;
+
+use Doctrine\ORM\Mapping as ORM;
+use Ecocode\SyliusBasePricePlugin\Entity\Product\ProductVariantInterface;
+use Ecocode\SyliusBasePricePlugin\Entity\Product\ProductVariantTrait;
+use Sylius\Component\Core\Model\ProductVariant as BaseProductVariant;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="sylius_product_variant")
+ */
+class ProductVariant extends BaseProductVariant implements ProductVariantInterface
+{
+    use ProductVariantTrait;
+}
+```
+
+
+### Run migration
+
+```shell
+bin/console doctrine:migrations:diff
+bin/console doctrine:migrations:migrate
+```
+
 
 ## Usage
 
-### Running plugin tests
+##### 1. Select product unit
+![Screenshot edit product variant unit type](docs/images/admin-dropdown.jpg)
 
-  - PHPUnit
+##### 2. Set product unit value
+![Screenshot edit product variant base price](docs/images/admin.jpg)
 
-    ```bash
-    vendor/bin/phpunit
-    ```
+##### 3. See it in product detail page
+![Screenshot see product detail page](docs/images/product-detail-page.jpg)
 
-  - PHPSpec
+##### 4. See it in cart
+![Screenshot see in cart](docs/images/cart.jpg)
 
-    ```bash
-    vendor/bin/phpspec run
-    ```
 
-  - Behat (non-JS scenarios)
+## Testing
 
-    ```bash
-    vendor/bin/behat --strict --tags="~@javascript"
-    ```
+Setup
+```bash
+$ composer install
+$ cd tests/Application
+$ yarn install
+$ yarn run gulp
+$ bin/console assets:install public -e test
+$ bin/console doctrine:schema:create -e test
+$ bin/console server:run 127.0.0.1:8080 -d public -e test
+```
 
-  - Behat (JS scenarios)
- 
-    1. [Install Symfony CLI command](https://symfony.com/download).
- 
-    2. Start Headless Chrome:
-    
-      ```bash
-      google-chrome-stable --enable-automation --disable-background-networking --no-default-browser-check --no-first-run --disable-popup-blocking --disable-default-apps --allow-insecure-localhost --disable-translate --disable-extensions --no-sandbox --enable-features=Metal --headless --remote-debugging-port=9222 --window-size=2880,1800 --proxy-server='direct://' --proxy-bypass-list='*' http://127.0.0.1
-      ```
-    
-    3. Install SSL certificates (only once needed) and run test application's webserver on `127.0.0.1:8080`:
-    
-      ```bash
-      symfony server:ca:install
-      APP_ENV=test symfony server:start --port=8080 --dir=tests/Application/public --daemon
-      ```
-    
-    4. Run Behat:
-    
-      ```bash
-      vendor/bin/behat --strict --tags="@javascript"
-      ```
-    
-  - Static Analysis
-  
-    - Psalm
-    
-      ```bash
-      vendor/bin/psalm
-      ```
-      
-    - PHPStan
-    
-      ```bash
-      vendor/bin/phpstan analyse -c phpstan.neon -l max src/  
-      ```
-
-  - Coding Standard
-  
-    ```bash
-    vendor/bin/ecs check src
-    ```
-
-### Opening Sylius with your plugin
-
-- Using `test` environment:
-
-    ```bash
-    (cd tests/Application && APP_ENV=test bin/console sylius:fixtures:load)
-    (cd tests/Application && APP_ENV=test bin/console server:run -d public)
-    ```
-    
-- Using `dev` environment:
-
-    ```bash
-    (cd tests/Application && APP_ENV=dev bin/console sylius:fixtures:load)
-    (cd tests/Application && APP_ENV=dev bin/console server:run -d public)
-    ```
+Run Tests
+```bash
+$ vendor/bin/behat
+$ vendor/bin/phpunit
+$ vendor/bin/phpstan analyse -c phpstan.neon -l max src/
+```
