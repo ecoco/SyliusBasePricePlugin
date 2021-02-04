@@ -48,7 +48,24 @@ return [
 
 imports:
     - { resource: "@EcocodeSyliusBasePricePlugin/Resources/config/config.yaml" }
+
+# Custom config override
+# Mapping config will not be merged so all default mapping will be gone
+#ecocode_sylius_base_price:
+#    use_short_unit_name: false
+#    mapping:
+#        UnitConverter\Measure::VOLUME:
+#            - { unit: UnitConverter\Unit\Volume\Millilitre, mod: 10 }
 ```
+
+## Advanced configuration
+
+If you want to have more control over what metrics are visible and how it will be converted then you should update:
+
+`ecocode_sylius_base_price:` (uncomment from above)
+
+Its default values are defined in `src/Resources/config/config.yaml`
+
 
 ### Extend `ProductVariant` entity
 
@@ -75,7 +92,6 @@ class ProductVariant extends BaseProductVariant implements ProductVariantInterfa
     use ProductVariantTrait;
 }
 ```
-
 
 ### Run migration
 

@@ -24,6 +24,11 @@ final class EcocodeSyliusBasePriceExtension extends Extension
      */
     public function load(array $config, ContainerBuilder $container): void
     {
+        // if mapping override is set then drop default config altogether
+        if (!empty($config[1]['mapping']) && isset($config[0]['mapping'])) {
+            $config[0]['mapping'] = [];
+        }
+
         $config = $this->processConfiguration($this->getConfiguration([], $container), $config);
 
         $container->setParameter('ecocode_sylius_base_price', $config);
