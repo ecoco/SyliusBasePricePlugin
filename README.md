@@ -100,6 +100,11 @@ bin/console doctrine:migrations:diff
 bin/console doctrine:migrations:migrate
 ```
 
+### Clear cache
+```shell
+bin/console cache:clear
+```
+
 
 ## Usage
 
