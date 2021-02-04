@@ -1,12 +1,9 @@
-<p align="center">
-    <a href="https://sylius.com" target="_blank">
-        <img src="https://demo.sylius.com/assets/shop/img/logo.png" />
-    </a>
-</p>
+#Ecocode Sylius Base Price Plugin
 
-<h1 align="center">Ecocode Sylius Base Price Plugin</h1>
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE)
 
-<p align="center">Plugin that calculates and shows product base price.</p>
+Plugin that calculates and shows product base price
 
 ## Documentation
 
@@ -140,3 +137,10 @@ $ vendor/bin/behat
 $ vendor/bin/phpunit
 $ vendor/bin/phpstan analyse -c phpstan.neon -l max src/
 ```
+
+
+
+[ico-version]: https://img.shields.io/packagist/v/ecoco/sylius-base-price-plugin.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/ecoco/sylius-base-price-plugin

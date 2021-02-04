@@ -4,6 +4,7 @@
     "keywords": ["sylius", "sylius-plugin", "ecoco"],
     "description": "Sylius base price plugin will show product base price next to its price and in cart",
     "license": "MIT",
+
     "require": {
         "php": "^7.3",
         "jordanbrauer/unit-converter": "^0.8.4",
