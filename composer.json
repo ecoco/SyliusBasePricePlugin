@@ -1,7 +1,7 @@
 {
-    "name": "ecocode/sylius-base-price-plugin",
+    "name": "ecoco/sylius-base-price-plugin",
     "type": "sylius-plugin",
-    "keywords": ["sylius", "sylius-plugin", "ecocode"],
+    "keywords": ["sylius", "sylius-plugin", "ecoco"],
     "description": "Sylius base price plugin will show product base price next to its price and in cart",
     "license": "MIT",
     "require": {
