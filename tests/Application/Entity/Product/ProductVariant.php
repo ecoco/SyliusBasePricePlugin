@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Ecocode\SyliusBasePricePlugin\Application\Entity;
+namespace Tests\Ecocode\SyliusBasePricePlugin\Application\Entity\Product;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ecocode\SyliusBasePricePlugin\Entity\Product\ProductVariantInterface;

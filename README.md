@@ -97,6 +97,14 @@ bin/console doctrine:migrations:diff
 bin/console doctrine:migrations:migrate
 ```
 
+or update schema without defining migration
+
+```shell
+bin/console -e test doctrine:schema:update --dump-sql
+bin/console -e test doctrine:schema:update --dump-sql --force
+```
+
+
 ### Clear cache
 ```shell
 bin/console cache:clear
@@ -118,39 +126,104 @@ bin/console cache:clear
 ![Screenshot see in cart](docs/images/cart.jpg)
 
 
-## Testing
+# Testing
 
-Setup
-```bash
-$ composer install
-$ cd tests/Application
-$ yarn install
-$ yarn run gulp
+## Setup
+
+Edit tests/Application/.env.test file. And add database configuration
+
 ```
-Create a local.env file
-```bash
-APP_ENV=test
-DATABASE_URL=mysql://mysql_user:mysql_password@127.0.0.1/my-dev-database
+DATABASE_URL=mysql://root:root@127.0.0.1/sylius
+
+# if you're running mariadb
+DATABASE_URL=mysql://root:root@127.0.0.1/sylius?serverVersion=mariadb-10.3.25
 ```
+
+Export test env (then commands dont require `-e test`)
+
+```bash
+export APP_ENV=test
+```
+
+## Installation
 
 Continue with setup
 ```bash
-$ bin/console assets:install public -e test
-$ bin/console doctrine:schema:create -e test
-$ bin/console sylius:fixtures:load -e test
-$ bin/console server:run 127.0.0.1:8080 -d public -e test
+composer update
+cd tests/Application
+yarn install
+yarn run gulp
+bin/console assets:install public -e test
+bin/console doctrine:database:create -e test
+bin/console doctrine:schema:create -e test
+bin/console sylius:fixtures:load -e test
+bin/console cache:clear -e test
+bin/console doctrine:schema:update --dump-sql --force -e test
+bin/console server:run 127.0.0.1:8080 -d public -e test
 ```
 
-Run Tests
 ```bash
-$ vendor/bin/behat
-$ vendor/bin/phpunit
-$ vendor/bin/phpstan analyse -c phpstan.neon -l max src/
+cd ../../
 ```
 
+## PhpUnit
+
+```bash
+vendor/bin/phpunit
+```
+
+
+## Static code analysis
+
+### Psalm
+
+```bash
+vendor/bin/psalm
+```
+
+### PHPStan
+
+```bash
+vendor/bin/phpstan analyse -c phpstan.neon -l max src/  
+```
+
+### Coding Standard
+
+```bash
+vendor/bin/ecs check src
+```
+
+
+## Behat (JS scenarios)
+
+    1. [Install Symfony CLI command](https://symfony.com/download).
+
+    2. Start Chrome (all other chrome sessions needs to be closed first):
+
+     Headless
+     ```bash
+     google-chrome-stable --enable-automation --disable-background-networking --no-default-browser-check --no-first-run --disable-popup-blocking --disable-default-apps --allow-insecure-localhost --disable-translate --disable-extensions --no-sandbox --enable-features=Metal --headless --remote-debugging-port=9222 --window-size=2880,1800 --proxy-server='direct://' --proxy-bypass-list='*' http://127.0.0.1
+     ```
+
+     Normal
+     ```bash
+     google-chrome-stable --enable-automation --disable-background-networking --no-default-browser-check --no-first-run --disable-popup-blocking --disable-default-apps --allow-insecure-localhost --disable-translate --disable-extensions --no-sandbox --enable-features=Metal --remote-debugging-port=9222 --window-size=2880,1800 --proxy-server='direct://' --proxy-bypass-list='*' http://127.0.0.1
+     ```
+
+    3. Install SSL certificates (only once needed) and run test application's webserver on `127.0.0.1:8080`:
+
+     ```bash
+     symfony server:ca:install
+     APP_ENV=test symfony server:start --port=8080 --dir=tests/Application/public --daemon
+     ```
+
+    4. Run Behat:
+
+     ```bash
+     vendor/bin/behat --strict --tags="@javascript"
+     ```
 
 
 [ico-version]: https://img.shields.io/packagist/v/ecoco/sylius-base-price-plugin.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-
 [link-packagist]: https://packagist.org/packages/ecoco/sylius-base-price-plugin
