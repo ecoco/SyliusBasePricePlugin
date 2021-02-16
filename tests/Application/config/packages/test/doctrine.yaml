@@ -1,0 +1,10 @@
+doctrine:
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        auto_mapping: true
+        mappings:
+            App:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/Entity'
+                prefix: 'Tests\Ecocode\SyliusBasePricePlugin\Application\Entity'

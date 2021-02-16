@@ -12,7 +12,7 @@ use Sylius\Component\Core\Model\ChannelPricingInterface;
 use Sylius\Component\Currency\Model\Currency;
 use Sylius\Component\Locale\Model\Locale;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Tests\Ecocode\SyliusBasePricePlugin\Application\Entity\ProductVariant;
+use Tests\Ecocode\SyliusBasePricePlugin\Application\Entity\Product\ProductVariant;
 use UnitConverter\Unit\UnitInterface;
 
 /**
