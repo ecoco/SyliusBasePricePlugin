@@ -7,7 +7,7 @@ Plugin that calculates and shows product base price
 
 ## Documentation
 
-Sylius Base Price Plugin allows you to add extra information to your shop about product base price. 
+Sylius Base Price Plugin allows you to add extra information to your shop about product base price.
 After installation you will need to set up product variable mass or volume or other unit.
 This value will be used to calculate base unit price and will show up in product detail page and cart.
 
@@ -26,7 +26,7 @@ This value will be used to calculate base unit price and will show up in product
 composer require ecoco/sylius-base-price-plugin
 ```
 
-### Enable plugin 
+### Enable plugin
 
 Register the plugin by adding it to your `config/bundles.php` file
 
@@ -126,8 +126,18 @@ $ composer install
 $ cd tests/Application
 $ yarn install
 $ yarn run gulp
+```
+Create a local.env file
+```bash
+APP_ENV=test
+DATABASE_URL=mysql://mysql_user:mysql_password@127.0.0.1/my-dev-database
+```
+
+Continue with setup
+```bash
 $ bin/console assets:install public -e test
 $ bin/console doctrine:schema:create -e test
+$ bin/console sylius:fixtures:load -e test
 $ bin/console server:run 127.0.0.1:8080 -d public -e test
 ```
 
