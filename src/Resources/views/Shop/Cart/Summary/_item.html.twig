@@ -19,7 +19,7 @@
         {# add new base price info here #}
         {% set basePrice = ecocode_calculate_base_price(item.variant) %}
         {% if basePrice is not empty %}
-            <div class="base_price_cart">{{ basePrice }}</div>
+            <div class="sylius-cart-base-price"  {{ sylius_test_html_attribute('cart-product-base-price', item.productName) }}>{{ basePrice }}</div>
         {% endif %}
         {# add new base price info here #}
 
