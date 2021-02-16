@@ -4,7 +4,19 @@
     <services>
         <defaults public="true" />
 
-        <service id="sylius.behat.page.pdp_base_price" class="Tests\Ecocode\SyliusBasePricePlugin\Behat\Page\Shop\Product\ShowPage" parent="sylius.behat.symfony_page" public="false" />
+<!--        <service id="sylius.behat.page.pdp_base_price" class="Tests\Ecocode\SyliusBasePricePlugin\Behat\Page\Shop\Product\ShowPage" parent="sylius.behat.symfony_page" public="false" />-->
+
+        <service id="sylius.behat.page.pdp_base_price" class="Tests\Ecocode\SyliusBasePricePlugin\Behat\Page\Shop\Product\ShowPage" public="false">
+            <argument type="service" id="behat.mink.default_session"/>
+            <argument type="service" id="behat.mink.parameters"/>
+            <argument type="service" id="router.default"/>
+        </service>
+
+        <service id="sylius.behat.page.shop.cart_summary_base_price" class="Tests\Ecocode\SyliusBasePricePlugin\Behat\Page\Shop\Cart\SummaryPage" public="false">
+            <argument type="service" id="behat.mink.default_session"/>
+            <argument type="service" id="behat.mink.parameters"/>
+            <argument type="service" id="router.default"/>
+        </service>
 
     </services>
 </container>

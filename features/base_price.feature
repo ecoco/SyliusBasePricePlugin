@@ -13,13 +13,9 @@ Feature: Product Base Price
         When I check this product's details
         Then I should see the product base price attribute '["$0.10 \/ 100 ml"]'
         Then I should see the product base price "$0.10 / 100 ml"
-
-
-
-
-
-#        When I add product "Milk 1l" to the cart
-#        Then I should be on my cart summary page
-#        And I should be notified that the product has been successfully added
-#        And there should be one item in my cart
-#        And this item should have name "Milk 1l"
+        When I add product "Milk 1l" to the cart
+        Then I should be on my cart summary page
+        And I should be notified that the product has been successfully added
+        And there should be one item in my cart
+        And this item should have name "Milk 1l"
+        Then I should see in cart product "Milk 1l" base price "$0.10 / 100 ml"
