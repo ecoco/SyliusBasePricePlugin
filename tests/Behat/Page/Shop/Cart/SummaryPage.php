@@ -17,11 +17,9 @@ class SummaryPage extends SymfonyPage implements SummaryPageInterface
         return 'sylius_shop_cart_summary';
     }
 
-    public function getItemBasePrice(string $productName): string
+    public function getItemBasePriceText(string $productName): string
     {
-        $basePrice = $this->getElement('product_base_price', ['%name%' => $productName]);
-
-        return trim($basePrice->getText());
+        return $this->getBasePriceElement($productName)->getText();
     }
 
     protected function getDefinedElements(): array
@@ -29,5 +27,21 @@ class SummaryPage extends SymfonyPage implements SummaryPageInterface
         return array_merge(parent::getDefinedElements(), [
             'product_base_price' => '[data-test-cart-product-row="%name%"] [data-test-cart-product-base-price]',
         ]);
+    }
+
+    private function hasBasePrice(string $productName): bool
+    {
+        return $this->hasElement('product_base_price', ['%name%' => $productName]);
+    }
+
+    private function getBasePriceElement(string $productName)
+    {
+        if (!$this->hasBasePrice($productName)) {
+            throw new \RuntimeException('Element not found');
+        }
+
+        $element = $this->getElement('product_base_price', ['%name%' => $productName]);
+
+        return $element;
     }
 }

@@ -25,6 +25,6 @@ final class CartContext implements Context
      */
     public function iShouldSeeTheProductBasePrice(string $productName, string $baseprice)
     {
-        Assert::same($this->summaryPage->getItemBasePrice($productName), $baseprice);
+        Assert::same($this->summaryPage->getItemBasePriceText($productName), $baseprice);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Ecocode\SyliusBasePricePlugin\Behat\Page\Shop\Product;
 
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
+use Behat\Mink\Element\NodeElement;
 
 /**
  * Class ShowPage
@@ -22,19 +23,9 @@ class ShowPage extends SymfonyPage implements ShowPageInterface
         return $this->getBasePriceElement()->getAttribute('data-base-price-text');
     }
 
-    public function getBasePrice(): string
+    public function getBasePriceText(): string
     {
         return $this->getBasePriceElement()->getText();
-    }
-
-    public function hasBasePriceMessage($text): bool
-    {
-        return $this->getBasePrice() === $text;
-    }
-
-    public function hasBasePrice(): bool
-    {
-        return $this->hasElement('base_price');
     }
 
     protected function getDefinedElements(): array
@@ -44,14 +35,17 @@ class ShowPage extends SymfonyPage implements ShowPageInterface
         ]);
     }
 
-    private function getBasePriceElement()
+    private function getBasePriceElement(): NodeElement
     {
         if (!$this->hasBasePrice()) {
             throw new \RuntimeException('Element not found');
         }
 
-        $element = $this->getElement('base_price');
+        return $this->getElement('base_price');
+    }
 
-        return $element;
+    private function hasBasePrice(): bool
+    {
+        return $this->hasElement('base_price');
     }
 }

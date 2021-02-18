@@ -17,5 +17,5 @@ use FriendsOfBehat\PageObjectExtension\Page\PageInterface;
 
 interface SummaryPageInterface extends PageInterface
 {
-    public function getItemBasePrice(string $productName): string;
+    public function getItemBasePriceText(string $productName): string;
 }
