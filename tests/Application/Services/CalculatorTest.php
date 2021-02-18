@@ -98,7 +98,7 @@ class CalculatorTest extends WebTestCase
         $locale->setCode($localeCode);
         $this->channelMock->expects($this->any())->method('getDefaultLocale')->will($this->returnValue($locale));
 
-        $data = $this->calculator->calculate($this->productVariantMock, $this->channelMock);
+        $data = $this->calculator->calculate($this->productVariantMock, $this->channelMock, $currencyCode);
 
         $this->assertEquals($expected, $data);
     }

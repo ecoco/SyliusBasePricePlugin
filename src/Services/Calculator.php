@@ -6,8 +6,11 @@ namespace Ecocode\SyliusBasePricePlugin\Services;
 
 use Ecocode\SyliusBasePricePlugin\Entity\Mapping;
 use Ecocode\SyliusBasePricePlugin\Entity\Product\ProductVariantInterface;
+use Sylius\Bundle\MoneyBundle\Templating\Helper\ConvertMoneyHelper;
+use Sylius\Bundle\MoneyBundle\Templating\Helper\ConvertMoneyHelperInterface;
 use Sylius\Bundle\MoneyBundle\Templating\Helper\FormatMoneyHelper;
 use Sylius\Component\Core\Model\Channel;
+use Sylius\Component\Core\Model\ChannelPricingInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface as CoreModelProductVariantInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extension\AbstractExtension;
@@ -33,7 +36,10 @@ class Calculator extends AbstractExtension
     private $unitConverter;
 
     /** @var FormatMoneyHelper */
-    private $formatMoneyHelper;
+    private $moneyFormatter;
+
+    /** @var ConvertMoneyHelperInterface */
+    private $moneyConverter;
 
     /**
      * Calculator constructor.
@@ -47,9 +53,16 @@ class Calculator extends AbstractExtension
         UnitConverter $unitConverter,
         FormatMoneyHelper $formatMoneyHelper
     ) {
-        $this->translator        = $translator;
-        $this->formatMoneyHelper = $formatMoneyHelper;
+        $this->translator     = $translator;
+        $this->moneyFormatter = $formatMoneyHelper;
         $this->setUnitConverter($unitConverter);
+    }
+
+    public function setMoneyConverter(ConvertMoneyHelper $convertMoneyHelper)
+    {
+        $this->moneyConverter = $convertMoneyHelper;
+
+        return $this;
     }
 
     public function setUnitConverter(UnitConverter $unitConverter): self
@@ -80,11 +93,16 @@ class Calculator extends AbstractExtension
 
     /**
      * @param ProductVariantInterface $productVariant
+     * @param Channel                 $channel
+     * @param string|null             $currencyCode current currency code
      *
-     * @return null|string
+     * @return string|null
      */
-    public function calculate(ProductVariantInterface $productVariant, Channel $channel): ?string
-    {
+    public function calculate(
+        ProductVariantInterface $productVariant,
+        Channel $channel,
+        string $currencyCode = null
+    ): ?string {
         if (!$productVariant instanceof CoreModelProductVariantInterface) {
             return null;
         }
@@ -110,31 +128,15 @@ class Calculator extends AbstractExtension
                     continue;
                 }
 
-                $format              = 'ecocode_sylius_base_price_plugin.%s.%s';
-                $unitType            = sprintf($format, $this->useShortUnitName ? 'unit_short' : 'unit', $symbol);
-                $unitTypeTranslation = $this->translator->trans($unitType);
-                if ($unitTypeTranslation == $unitType) { // fallback if unit translation is missing
-                    $unitTypeTranslation = $this->useShortUnitName ? $symbol : $mapping->getUnitClass()->getName();
-                }
-
-                $mod           = $mapping->getMod();
-                $baseCurrency  = $channel->getBaseCurrency();
-                $defaultLocale = $channel->getDefaultLocale();
-                $endPrice      = intval(($channelPricing->getPrice() / $targetUnitSize) * $mod);
-                $text          = $this->translator->trans(
-                    'ecocode_sylius_base_price_plugin.format',
-                    [
-                        '%PRICE%' => $this->formatMoneyHelper->formatAmount(
-                            $endPrice,
-                            $baseCurrency ? (string)$baseCurrency->getCode() : '',
-                            $defaultLocale ? (string)$defaultLocale->getCode() : ''
-                        ),
-                        '%VALUE%' => $mod > 1 ? $mod . ' ' : '',
-                        '%TYPE%'  => $unitTypeTranslation
-                    ]
+                $params = $this->getBasePriceFormatParams(
+                    $channel,
+                    $channelPricing,
+                    $mapping,
+                    (float)$targetUnitSize,
+                    $currencyCode
                 );
 
-                return $text;
+                return $this->translator->trans('ecocode_sylius_base_price_plugin.format', $params);
             }
         }
 
@@ -165,6 +167,38 @@ class Calculator extends AbstractExtension
         }
 
         return $this->getMeasurementMappings($measurement);
+    }
+
+    private function getBasePriceFormatParams(
+        Channel $channel,
+        ChannelPricingInterface $channelPricing,
+        Mapping $mapping,
+        float $targetUnitSize,
+        string $currencyCode
+    ): array {
+        $symbol              = $mapping->getUnitClass()->getSymbol();
+        $format              = 'ecocode_sylius_base_price_plugin.%s.%s';
+        $unitType            = sprintf($format, $this->useShortUnitName ? 'unit_short' : 'unit', $symbol);
+        $unitTypeTranslation = $this->translator->trans($unitType);
+        if ($unitTypeTranslation == $unitType) { // fallback if unit translation is missing
+            $unitTypeTranslation = $this->useShortUnitName ? $symbol : $mapping->getUnitClass()->getName();
+        }
+
+        $mod              = $mapping->getMod();
+        $baseCurrency     = $channel->getBaseCurrency();
+        $baseCurrencyCode = $baseCurrency && $baseCurrency->getCode() ? $baseCurrency->getCode() : $currencyCode;
+        $targetCurrency   = $currencyCode ?? $baseCurrencyCode;
+        $price            = ($channelPricing->getPrice() / $targetUnitSize) * $mod;
+        $convertedPrice   = $this->moneyConverter->convertAmount((int)$price, $baseCurrencyCode, $targetCurrency);
+        $defaultLocale    = $channel->getDefaultLocale();
+        $locale           = $defaultLocale ? (string)$defaultLocale->getCode() : '';
+        $formattedPrice   = $this->moneyFormatter->formatAmount((int)$convertedPrice, $targetCurrency, $locale);
+
+        return [
+            '%PRICE%' => $formattedPrice,
+            '%VALUE%' => $mod > 1 ? $mod . ' ' : '',
+            '%TYPE%'  => $unitTypeTranslation
+        ];
     }
 
     /**
