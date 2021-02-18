@@ -7,9 +7,10 @@ namespace Ecocode\SyliusBasePricePlugin\Services\Helper;
 use Ecocode\SyliusBasePricePlugin\Entity\Product\ProductVariantInterface;
 use Ecocode\SyliusBasePricePlugin\Services\Calculator;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
+use Sylius\Component\Core\Model\ProductInterface;
+use Sylius\Component\Currency\Context\CurrencyContextInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Sylius\Component\Core\Model\ProductInterface;
 
 /**
  * Class ProductVariantsBasePriceExtension
@@ -23,10 +24,17 @@ final class ProductVariantsBasePriceExtension extends AbstractExtension
     /** @var ChannelContextInterface */
     private $channelContext;
 
-    public function __construct(Calculator $calculator, ChannelContextInterface $channelContext)
-    {
-        $this->channelContext    = $channelContext;
-        $this->calculator = $calculator;
+    /** @var CurrencyContextInterface */
+    private $currencyContext;
+
+    public function __construct(
+        Calculator $calculator,
+        ChannelContextInterface $channelContext,
+        CurrencyContextInterface $currencyContext
+    ) {
+        $this->channelContext  = $channelContext;
+        $this->calculator      = $calculator;
+        $this->currencyContext = $currencyContext;
     }
 
     public function getFunctions(): array
@@ -40,9 +48,14 @@ final class ProductVariantsBasePriceExtension extends AbstractExtension
     public function calculateBasePrice(ProductVariantInterface $productVariant): ?string
     {
         /** @var \Sylius\Component\Core\Model\Channel $channel */
-        $channel = $this->channelContext->getChannel();
+        $channel             = $this->channelContext->getChannel();
+        $currentCurrencyCode = (string)$this->currencyContext->getCurrencyCode();
 
-        return $this->calculator->calculate($productVariant, $channel);
+        return $this->calculator->calculate(
+            $productVariant,
+            $channel,
+            $currentCurrencyCode
+        );
     }
 
     /**

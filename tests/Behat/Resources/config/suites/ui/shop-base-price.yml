@@ -8,12 +8,18 @@ default:
                 - sylius.behat.context.transform.lexical
                 - sylius.behat.context.transform.shared_storage
                 - sylius.behat.context.transform.product
+                - sylius.behat.context.transform.currency
+                - sylius.behat.context.transform.locale
 
                 - sylius.behat.context.setup.channel
                 - sylius.behat.context.setup.product
+                - sylius.behat.context.setup.currency
+                - sylius.behat.context.setup.locale
 
                 - sylius.behat.context.ui.shop.cart
                 - sylius.behat.context.ui.shop.product
+                - sylius.behat.context.ui.shop.locale
+                - sylius.behat.context.ui.shop.currency
 
                 - sylius.behat.context.setup.product_base_price
                 - sylius.behat.context.ui.product_base_price

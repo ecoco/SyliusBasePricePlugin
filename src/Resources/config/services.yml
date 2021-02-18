@@ -15,6 +15,7 @@ services:
         calls:
             - setMappingConfig: ['%ecocode_sylius_base_price.mapping%']
             - setUseShortUnitName: ['%ecocode_sylius_base_price.use_short_unit_name%']
+            - setMoneyConverter: ['@sylius.templating.helper.convert_money']
 
     Sylius\Bundle\MoneyBundle\Templating\Helper\FormatMoneyHelper: ~
 
