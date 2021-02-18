@@ -28,13 +28,13 @@ final class ProductContext implements Context
      */
     public function iShouldSeeTheProductBasePrice($baseprice)
     {
-        Assert::same($this->showPage->getBasePrice(), $baseprice);
+        Assert::same($this->showPage->getBasePriceText(), $baseprice);
     }
 
     /**
      * @Then I should see the product base price attribute :attributevalue
      */
-    public function iShouldHaveBasePriceElementAttribute($attributevalue)
+    public function iShouldHaveBasePriceElementAttribute(string $attributevalue)
     {
         Assert::same($this->showPage->getBasePriceAttribute(), $attributevalue);
     }

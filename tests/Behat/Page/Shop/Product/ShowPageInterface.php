@@ -8,11 +8,7 @@ use FriendsOfBehat\PageObjectExtension\Page\PageInterface;
 
 interface ShowPageInterface extends PageInterface
 {
-    public function getBasePrice(): string;
+    public function getBasePriceText(): string;
 
     public function getBasePriceAttribute(): string;
-
-    public function hasBasePriceMessage($text): bool;
-
-    public function hasBasePrice(): bool;
 }
