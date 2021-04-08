@@ -30,15 +30,18 @@ class BasePriceUnitChoiceType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $translated  = ['choice_translation_domain' => false];
-        $registry    = $this->converter->getRegistry();
-        $measurments = $registry->listMeasurements();
+        $translated = ['choice_translation_domain' => false];
+        $registry   = $this->converter->getRegistry();
 
-        foreach ($measurments as $measurement) {
+        /** @var string[] $measurements */
+        $measurements = $registry->listMeasurements();
+
+        foreach ($measurements as $measurement) {
+            /** @var string[] $units */
             $units = $registry->listUnits($measurement);
             foreach ($units as $symbol) {
                 $unit = $registry->loadUnit($symbol);
-                if (!$unit) {
+                if ($unit === null) {
                     continue;
                 }
 

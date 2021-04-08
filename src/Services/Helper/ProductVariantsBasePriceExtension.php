@@ -49,7 +49,7 @@ final class ProductVariantsBasePriceExtension extends AbstractExtension
     {
         /** @var \Sylius\Component\Core\Model\Channel $channel */
         $channel             = $this->channelContext->getChannel();
-        $currentCurrencyCode = (string)$this->currencyContext->getCurrencyCode();
+        $currentCurrencyCode = $this->currencyContext->getCurrencyCode();
 
         return $this->calculator->calculate(
             $productVariant,

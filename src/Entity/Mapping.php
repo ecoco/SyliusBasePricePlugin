@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Ecocode\SyliusBasePricePlugin\Entity;
 
+use InvalidArgumentException;
 use UnitConverter\Unit\UnitInterface;
 
 /**
@@ -31,9 +32,9 @@ class Mapping
      */
     public function __construct(array $data)
     {
-        $this->setMod((float)$data['mod']);
-        $this->setUnit((string)$data['unit']);
-        $this->setIfMoreThan((float)$data['ifMoreThan']);
+        $this->mod        = (float)$data['mod'];
+        $this->unit       = (string)$data['unit'];
+        $this->ifMoreThan = (float)$data['ifMoreThan'];
     }
 
     /**
@@ -90,7 +91,22 @@ class Mapping
     public function getUnitClass(): UnitInterface
     {
         if ($this->unitClass === null) {
-            $this->unitClass = new $this->unit;
+            if (!class_exists($this->unit)) {
+                $format = 'Unit class %s do not exist';
+                $message = sprintf($format, $this->unit);
+                throw new InvalidArgumentException($message);
+            }
+
+            /** @psalm-suppress MixedMethodCall */
+            $unitObject = new $this->unit;
+
+            if (!$unitObject instanceof UnitInterface) {
+                $format = 'Unit class %s have no implemented UnitInterface';
+                $message = sprintf($format, $this->unit);
+                throw new InvalidArgumentException($message);
+            }
+
+            $this->unitClass = $unitObject;
         }
 
         return $this->unitClass;

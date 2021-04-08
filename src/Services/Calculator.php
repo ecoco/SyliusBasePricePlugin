@@ -6,6 +6,7 @@ namespace Ecocode\SyliusBasePricePlugin\Services;
 
 use Ecocode\SyliusBasePricePlugin\Entity\Mapping;
 use Ecocode\SyliusBasePricePlugin\Entity\Product\ProductVariantInterface;
+use RuntimeException;
 use Sylius\Bundle\MoneyBundle\Templating\Helper\ConvertMoneyHelper;
 use Sylius\Bundle\MoneyBundle\Templating\Helper\ConvertMoneyHelperInterface;
 use Sylius\Bundle\MoneyBundle\Templating\Helper\FormatMoneyHelper;
@@ -24,21 +25,21 @@ use function constant;
 class Calculator extends AbstractExtension
 {
     /** @var array<string, array<string, array<string, string|float>>> */
-    private $mappingConfig;
+    private $mappingConfig = [];
 
     /** @var bool */
-    private $useShortUnitName;
+    private $useShortUnitName = true;
 
     /** @var TranslatorInterface */
     private $translator;
 
-    /** @var UnitConverter */
+    /** @var UnitConverter|null */
     private $unitConverter;
 
     /** @var FormatMoneyHelper */
     private $moneyFormatter;
 
-    /** @var ConvertMoneyHelperInterface */
+    /** @var ConvertMoneyHelperInterface|null */
     private $moneyConverter;
 
     /**
@@ -58,7 +59,7 @@ class Calculator extends AbstractExtension
         $this->setUnitConverter($unitConverter);
     }
 
-    public function setMoneyConverter(ConvertMoneyHelper $convertMoneyHelper)
+    public function setMoneyConverter(ConvertMoneyHelper $convertMoneyHelper): self
     {
         $this->moneyConverter = $convertMoneyHelper;
 
@@ -72,8 +73,17 @@ class Calculator extends AbstractExtension
         return $this;
     }
 
+    private function getUnitConverter(): UnitConverter
+    {
+        if ($this->unitConverter === null) {
+            throw new RuntimeException('Unit Converter class not set');
+        }
+
+        return $this->unitConverter;
+    }
+
     /**
-     * @param array<string, array<string, array<string, string|float>>> $mapping
+     * @param array<string, array<string, array<string, string|float>>> $mappingConfig
      *
      * @return $this
      */
@@ -94,14 +104,14 @@ class Calculator extends AbstractExtension
     /**
      * @param ProductVariantInterface $productVariant
      * @param Channel                 $channel
-     * @param string|null             $currencyCode current currency code
+     * @param string                  $currencyCode current currency code
      *
      * @return string|null
      */
     public function calculate(
         ProductVariantInterface $productVariant,
         Channel $channel,
-        string $currencyCode = null
+        string $currencyCode
     ): ?string {
         if (!$productVariant instanceof CoreModelProductVariantInterface) {
             return null;
@@ -111,20 +121,23 @@ class Calculator extends AbstractExtension
 
         foreach ($measurementMapping as $mappings) {
             $this
-                ->unitConverter
+                ->getUnitConverter()
                 ->from((string)$productVariant->getBasePriceUnit())
                 ->convert((string)$productVariant->getBasePriceValue());
 
             foreach ($mappings as $mapping) {
                 $symbol         = $mapping->getUnitClass()->getSymbol();
-                $targetUnitSize = $this->unitConverter->to((string)$symbol);
+                $targetUnitSize = $this->getUnitConverter()->to((string)$symbol);
 
                 if (!$this->isMappingUsable($mapping, $targetUnitSize)) {
                     continue;
                 }
 
                 $channelPricing = $productVariant->getChannelPricingForChannel($channel);
-                if (!$channelPricing) {
+                if ($channelPricing === null) {
+                    continue;
+                }
+                if ($channelPricing->getPrice() === null) {
                     continue;
                 }
 
@@ -151,18 +164,18 @@ class Calculator extends AbstractExtension
     public function getMeasurementMapping(ProductVariantInterface $productVariant): array
     {
         $basePriceUnitValue = $productVariant->getBasePriceUnit();
-        if (empty($basePriceUnitValue) || empty($productVariant->getBasePriceValue())) {
+        if ($basePriceUnitValue === null || $productVariant->getBasePriceValue() === null) {
             return [];
         }
 
-        $basePriceUnit = $this->unitConverter->getRegistry()->loadUnit($basePriceUnitValue);
+        $basePriceUnit = $this->getUnitConverter()->getRegistry()->loadUnit($basePriceUnitValue);
 
-        if (!$basePriceUnit) {
+        if ($basePriceUnit === null) {
             return [];
         }
 
         $measurement = $basePriceUnit->getUnitOf();
-        if (empty($measurement)) {
+        if ($measurement === null) {
             return [];
         }
 
@@ -174,9 +187,9 @@ class Calculator extends AbstractExtension
         ChannelPricingInterface $channelPricing,
         Mapping $mapping,
         float $targetUnitSize,
-        string $currencyCode
+        string $targetCurrency
     ): array {
-        $symbol              = $mapping->getUnitClass()->getSymbol();
+        $symbol              = (string)$mapping->getUnitClass()->getSymbol();
         $format              = 'ecocode_sylius_base_price_plugin.%s.%s';
         $unitType            = sprintf($format, $this->useShortUnitName ? 'unit_short' : 'unit', $symbol);
         $unitTypeTranslation = $this->translator->trans($unitType);
@@ -184,14 +197,18 @@ class Calculator extends AbstractExtension
             $unitTypeTranslation = $this->useShortUnitName ? $symbol : $mapping->getUnitClass()->getName();
         }
 
+        if ($this->moneyConverter === null) {
+            throw new RuntimeException('Money converter not set');
+        }
+
         $mod              = $mapping->getMod();
         $baseCurrency     = $channel->getBaseCurrency();
-        $baseCurrencyCode = $baseCurrency && $baseCurrency->getCode() ? $baseCurrency->getCode() : $currencyCode;
-        $targetCurrency   = $currencyCode ?? $baseCurrencyCode;
-        $price            = ($channelPricing->getPrice() / $targetUnitSize) * $mod;
+        $baseCurrencyCode = $baseCurrency !== null && $baseCurrency->getCode() !== null ? $baseCurrency->getCode() : $targetCurrency;
+        $channelPrice     = (float)$channelPricing->getPrice();
+        $price            = ($channelPrice / $targetUnitSize) * $mod;
         $convertedPrice   = $this->moneyConverter->convertAmount((int)$price, $baseCurrencyCode, $targetCurrency);
         $defaultLocale    = $channel->getDefaultLocale();
-        $locale           = $defaultLocale ? (string)$defaultLocale->getCode() : '';
+        $locale           = $defaultLocale !== null ? (string)$defaultLocale->getCode() : '';
         $formattedPrice   = $this->moneyFormatter->formatAmount((int)$convertedPrice, $targetCurrency, $locale);
 
         return [
@@ -214,13 +231,13 @@ class Calculator extends AbstractExtension
         }
 
         foreach ($this->mappingConfig as $measurementsConst => $mappingsConfig) {
-            $measurementConfig = (string)constant((string)$measurementsConst);
+            $measurementConfig = (string)constant($measurementsConst);
             if ($measurement != $measurementConfig) {
                 continue;
             }
 
             foreach ($mappingsConfig as $mappingData) {
-                $mappings[(string)$measurementConfig][] = new Mapping($mappingData);
+                $mappings[$measurementConfig][] = new Mapping($mappingData);
             }
         }
 
