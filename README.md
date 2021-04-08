@@ -146,6 +146,7 @@ Run Tests
 $ vendor/bin/behat
 $ vendor/bin/phpunit
 $ vendor/bin/phpstan analyse -c phpstan.neon -l max src/
+$ vendor/bin/psalm
 ```
 
 

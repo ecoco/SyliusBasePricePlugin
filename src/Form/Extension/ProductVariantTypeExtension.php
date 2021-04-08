@@ -18,8 +18,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 class ProductVariantTypeExtension extends AbstractTypeExtension
 {
     /**
-     * @param FormBuilderInterface<FormBuilder> $builder
-     * @param array<string, mixed>              $options
+     * @param FormBuilderInterface $builder
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

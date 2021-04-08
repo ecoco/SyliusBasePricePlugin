@@ -21,10 +21,10 @@ use function constant;
 class Calculator extends AbstractExtension
 {
     /** @var array<string, array<string, array<string, string|float>>> */
-    private $mappingConfig;
+    private $mappingConfig = [];
 
     /** @var bool */
-    private $useShortUnitName;
+    private $useShortUnitName = true;
 
     /** @var TranslatorInterface */
     private $translator;
@@ -49,7 +49,7 @@ class Calculator extends AbstractExtension
     ) {
         $this->translator        = $translator;
         $this->formatMoneyHelper = $formatMoneyHelper;
-        $this->setUnitConverter($unitConverter);
+        $this->unitConverter     = $unitConverter;
     }
 
     public function setUnitConverter(UnitConverter $unitConverter): self
@@ -60,7 +60,7 @@ class Calculator extends AbstractExtension
     }
 
     /**
-     * @param array<string, array<string, array<string, string|float>>> $mapping
+     * @param array<string, array<string, array<string, string|float>>> $mappingConfig
      *
      * @return $this
      */
@@ -98,15 +98,19 @@ class Calculator extends AbstractExtension
                 ->convert((string)$productVariant->getBasePriceValue());
 
             foreach ($mappings as $mapping) {
-                $symbol         = $mapping->getUnitClass()->getSymbol();
-                $targetUnitSize = $this->unitConverter->to((string)$symbol);
+                $symbol         = (string)$mapping->getUnitClass()->getSymbol();
+                $targetUnitSize = $this->unitConverter->to($symbol);
 
                 if (!$this->isMappingUsable($mapping, $targetUnitSize)) {
                     continue;
                 }
 
                 $channelPricing = $productVariant->getChannelPricingForChannel($channel);
-                if (!$channelPricing) {
+                if ($channelPricing === null) {
+                    continue;
+                }
+                $channelPrice = $channelPricing->getPrice();
+                if ($channelPrice === null) {
                     continue;
                 }
 
@@ -120,14 +124,14 @@ class Calculator extends AbstractExtension
                 $mod           = $mapping->getMod();
                 $baseCurrency  = $channel->getBaseCurrency();
                 $defaultLocale = $channel->getDefaultLocale();
-                $endPrice      = intval(($channelPricing->getPrice() / $targetUnitSize) * $mod);
+                $endPrice      = intval(($channelPrice / (float)$targetUnitSize) * $mod);
                 $text          = $this->translator->trans(
                     'ecocode_sylius_base_price_plugin.format',
                     [
                         '%PRICE%' => $this->formatMoneyHelper->formatAmount(
                             $endPrice,
-                            $baseCurrency ? (string)$baseCurrency->getCode() : '',
-                            $defaultLocale ? (string)$defaultLocale->getCode() : ''
+                            $baseCurrency !== null ? (string)$baseCurrency->getCode() : '',
+                            $defaultLocale !== null ? (string)$defaultLocale->getCode() : ''
                         ),
                         '%VALUE%' => $mod > 1 ? $mod . ' ' : '',
                         '%TYPE%'  => $unitTypeTranslation
@@ -149,18 +153,18 @@ class Calculator extends AbstractExtension
     public function getMeasurementMapping(ProductVariantInterface $productVariant): array
     {
         $basePriceUnitValue = $productVariant->getBasePriceUnit();
-        if (empty($basePriceUnitValue) || empty($productVariant->getBasePriceValue())) {
+        if ($basePriceUnitValue === null || $productVariant->getBasePriceValue() === null) {
             return [];
         }
 
         $basePriceUnit = $this->unitConverter->getRegistry()->loadUnit($basePriceUnitValue);
 
-        if (!$basePriceUnit) {
+        if ($basePriceUnit === null) {
             return [];
         }
 
         $measurement = $basePriceUnit->getUnitOf();
-        if (empty($measurement)) {
+        if ($measurement === null) {
             return [];
         }
 
@@ -180,13 +184,13 @@ class Calculator extends AbstractExtension
         }
 
         foreach ($this->mappingConfig as $measurementsConst => $mappingsConfig) {
-            $measurementConfig = (string)constant((string)$measurementsConst);
+            $measurementConfig = (string)constant($measurementsConst);
             if ($measurement != $measurementConfig) {
                 continue;
             }
 
             foreach ($mappingsConfig as $mappingData) {
-                $mappings[(string)$measurementConfig][] = new Mapping($mappingData);
+                $mappings[$measurementConfig][] = new Mapping($mappingData);
             }
         }
 

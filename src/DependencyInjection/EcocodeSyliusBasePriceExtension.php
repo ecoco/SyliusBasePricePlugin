@@ -17,23 +17,30 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 final class EcocodeSyliusBasePriceExtension extends Extension
 {
     /**
-     * @param array<string, mixed> $config
-     * @param ContainerBuilder     $container
+     * @param array            $config
+     * @param ContainerBuilder $container
      *
      * @throws \Exception
      */
     public function load(array $config, ContainerBuilder $container): void
     {
+        $original = 0;
+        $override = 1;
+
         // if mapping override is set then drop default config altogether
-        if (!empty($config[1]['mapping']) && isset($config[0]['mapping'])) {
-            $config[0]['mapping'] = [];
+        if (isset($config[$original]['mapping']) && isset($config[$override]['mapping'])) {
+            /** @var array|null $new */
+            $new = $config[$override]['mapping'];
+            if (is_array($new) && count($new) > 0) {
+                $config[$original]['mapping'] = [];
+            }
         }
 
         $config = $this->processConfiguration($this->getConfiguration([], $container), $config);
 
         $container->setParameter('ecocode_sylius_base_price', $config);
         $container->setParameter('ecocode_sylius_base_price.mapping', $config['mapping']);
-        $container->setParameter('ecocode_sylius_base_price.measurements', array_keys($config['mapping']));
+        $container->setParameter('ecocode_sylius_base_price.measurements', array_keys((array)$config['mapping']));
         $container->setParameter('ecocode_sylius_base_price.use_short_unit_name', $config['use_short_unit_name']);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
@@ -42,8 +49,8 @@ final class EcocodeSyliusBasePriceExtension extends Extension
     }
 
     /**
-     * @param array<string, mixed> $config
-     * @param ContainerBuilder     $container
+     * @param array            $config
+     * @param ContainerBuilder $container
      *
      * @return ConfigurationInterface
      */
