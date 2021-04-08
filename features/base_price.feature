@@ -2,6 +2,7 @@
 Feature: Product Base Price
     Should be visible
     In product detail page and cart
+    And its values must be correct
 
 
     @api @ui
