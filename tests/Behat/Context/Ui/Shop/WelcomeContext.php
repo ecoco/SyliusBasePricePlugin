@@ -5,26 +5,27 @@ declare(strict_types=1);
 namespace Tests\Ecocode\SyliusBasePricePlugin\Behat\Context\Ui\Shop;
 
 use Behat\Behat\Context\Context;
-use Tests\Acme\SyliusExamplePlugin\Behat\Page\Shop\WelcomePageInterface;
+use Tests\Ecocode\SyliusBasePricePlugin\Behat\Page\Shop\StaticWelcomePage;
+use Tests\Ecocode\SyliusBasePricePlugin\Behat\Page\Shop\DynamicWelcomePage;
 use Webmozart\Assert\Assert;
 
 final class WelcomeContext implements Context
 {
     /**
-     * @var WelcomePageInterface
+     * @var StaticWelcomePage
      */
     private $staticWelcomePage;
 
     /**
-     * @var WelcomePageInterface
+     * @var StaticWelcomePage
      */
     private $dynamicWelcomePage;
 
     /**
-     * @param WelcomePageInterface $staticWelcomePage
-     * @param WelcomePageInterface $dynamicWelcomePage
+     * @param StaticWelcomePage  $staticWelcomePage
+     * @param DynamicWelcomePage $dynamicWelcomePage
      */
-    public function __construct(WelcomePageInterface $staticWelcomePage, WelcomePageInterface $dynamicWelcomePage)
+    public function __construct(StaticWelcomePage $staticWelcomePage, DynamicWelcomePage $dynamicWelcomePage)
     {
         $this->staticWelcomePage = $staticWelcomePage;
         $this->dynamicWelcomePage = $dynamicWelcomePage;
