@@ -130,16 +130,24 @@ bin/console cache:clear
 
 ## Setup
 
-Edit tests/Application/.env.test file. And add database configuration
+1) You will need to have database running. You can use locally installed one or run it using docker.
+
+     ```
+     docker -d -rm run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=test -e MYSQL_DATABASE=sylius -e MYSQL_USER=app -e MYSQL_PASSWORD=test mariadb:10.5.9
+     ```
+
+2) Then edit and make sure database configuration is correct: 
+
+Edit tests/Application/.env.test file. And add database configuration there
 
 ```
 DATABASE_URL=mysql://root:root@127.0.0.1/sylius
 
 # if you're running mariadb
-DATABASE_URL=mysql://root:root@127.0.0.1/sylius?serverVersion=mariadb-10.3.25
+DATABASE_URL=mysql://root:root@0.0.0.0/sylius?serverVersion=mariadb-10.3.25
 ```
 
-Export test env (then commands dont require `-e test`)
+3) Export test env (then commands dont require `-e test`)
 
 ```bash
 export APP_ENV=test
@@ -148,23 +156,32 @@ export APP_ENV=test
 ## Installation
 
 Continue with setup
+
 ```bash
-composer update
+composer install
 cd tests/Application
 yarn install
 yarn run gulp
 bin/console assets:install public -e test
 bin/console doctrine:database:create -e test
+#bin/console doctrine:database:drop --force -e test
+#bin/console doctrine:database:create -e test
 bin/console doctrine:schema:create -e test
 bin/console sylius:fixtures:load -e test
 bin/console cache:clear -e test
 bin/console doctrine:schema:update --dump-sql --force -e test
-bin/console server:run 127.0.0.1:8080 -d public -e test
+
+# If you want to develop something this is one way of starting dev server.
+# Later on we will use symfony server because it can handle https way easier.
+#bin/console server:run 127.0.0.1:8080 -d public -e test
 ```
 
+Come back to root directory
 ```bash
 cd ../../
 ```
+
+Then you should be able to run phpunit and other static code analysis checks.
 
 ## PhpUnit
 
@@ -184,7 +201,7 @@ vendor/bin/psalm
 ### PHPStan
 
 ```bash
-vendor/bin/phpstan analyse -c phpstan.neon -l max src/  
+vendor/bin/phpstan analyse -c phpstan.neon -l max src/
 ```
 
 ### Coding Standard
