@@ -41,14 +41,14 @@ jobs:
       - name: run psalm
         run: ./vendor/bin/psalm
 
-      - name: run phpstan
-        run: ./vendor/bin/phpstan analyse -c /home/runner/work/SyliusBasePricePlugin/SyliusBasePricePlugin/phpstan.neon -l max src/
-
       - name: copy env
         run: cp tests/Application/.env.test tests/Application/.env
 
       - name: run phpunit
         run: ./vendor/bin/phpunit
+
+      - name: run phpstan
+        run: "./vendor/bin/phpstan analyse -c phpstan.neon -l max src/"
 
 #      - name: PHPUnit Tests
 #        uses: php-actions/phpunit@v2
