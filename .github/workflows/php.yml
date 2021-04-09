@@ -41,6 +41,9 @@ jobs:
       - name: pwd
         run: ls -l /app/
 
+      - name: cd app
+        run: cd /app
+
       - name: run phpstan
         run: ./vendor/bin/phpstan analyse -c /app/phpstan.neon -l max src/
 
