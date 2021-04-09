@@ -14,6 +14,9 @@ jobs:
           php_version: 7.3
           php_extensions: bcmath intl gd exif
 
+      - name: copy env
+        run: cp tests/Application/.env.test tests/Application/.env
+
       - name: run phpunit
         run: ./vendor/bin/phpunit
 
@@ -36,3 +39,10 @@ jobs:
 #          args: --coverage-text
 #        env:
 #          XDEBUG_MODE: coverage
+
+
+# wget https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions
+# mv install-php-extensions /usr/local/bin/
+# chmod +x /usr/local/bin/install-php-extensions
+# sync
+# install-php-extensions bcmath intl gd exif
