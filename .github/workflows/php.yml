@@ -3,28 +3,43 @@ name: CI-coverage
 on: [push]
 
 jobs:
-  build-test:
-    runs-on: ubuntu-latest
 
+  phpstan:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - uses: php-actions/composer@v5
+
+      - name: PHPStan Static Analysis
+        uses: php-actions/phpstan@v2
         with:
           php_version: 7.3
-          php_extensions: bcmath intl gd exif
+          configuration: phpstan.neon
+          path: src/
 
-      - name: run phpstan
-        run: ./vendor/bin/phpstan analyse -c phpstan.neon -l max src/
-
-      - name: run psalm
-        run: ./vendor/bin/psalm
-
-      - name: copy env
-        run: cp tests/Application/.env.test tests/Application/.env
-
-      - name: run phpunit
-        run: ./vendor/bin/phpunit
+#
+#  build-test:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - uses: php-actions/composer@v5
+#        with:
+#          php_version: 7.3
+#          php_extensions: bcmath intl gd exif
+#
+#      - name: run phpstan
+#        run: ./vendor/bin/phpstan analyse -c phpstan.neon -l max src/
+#
+#      - name: run psalm
+#        run: ./vendor/bin/psalm
+#
+#      - name: copy env
+#        run: cp tests/Application/.env.test tests/Application/.env
+#
+#      - name: run phpunit
+#        run: ./vendor/bin/phpunit
 
 #      - name: PHPUnit Tests
 #        uses: php-actions/phpunit@v2
