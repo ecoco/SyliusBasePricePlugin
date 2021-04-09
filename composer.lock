@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b64a07c0df02a07f0a33e934eabf5851",
+    "content-hash": "6c6323b2c23b528a80b72c1b42088385",
     "packages": [
         {
             "name": "api-platform/core",
@@ -3061,30 +3061,32 @@
         },
         {
             "name": "jordanbrauer/unit-converter",
-            "version": "v0.8.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jordanbrauer/unit-converter.git",
-                "reference": "be778e107bdd19494be2f1b246612ddf51a5a30d"
+                "reference": "81b6c00e62ba4208d173058fc95f5fdf065d06a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jordanbrauer/unit-converter/zipball/be778e107bdd19494be2f1b246612ddf51a5a30d",
-                "reference": "be778e107bdd19494be2f1b246612ddf51a5a30d",
+                "url": "https://api.github.com/repos/jordanbrauer/unit-converter/zipball/81b6c00e62ba4208d173058fc95f5fdf065d06a8",
+                "reference": "81b6c00e62ba4208d173058fc95f5fdf065d06a8",
                 "shasum": ""
             },
             "require": {
                 "ext-bcmath": "*",
-                "php": "^7.1"
+                "ext-intl": "*",
+                "php": "^7.1 || ^8.0"
             },
             "require-dev": {
-                "codedungeon/phpunit-result-printer": "^0.19.12",
-                "consolidation/robo": "^1.2",
-                "phpmetrics/phpmetrics": "^2.4",
-                "phpunit/phpunit": "^6.3",
-                "symfony/var-dumper": "^3.3",
-                "vlucas/phpdotenv": "^2.4"
+                "ergebnis/composer-normalize": "^2.13",
+                "marcocesarato/php-conventional-changelog": "^1.9",
+                "nunomaduro/phpinsights": "^1.14",
+                "pestphp/pest": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "symfony/var-dumper": "^3.3"
             },
+            "default-branch": true,
             "type": "component",
             "autoload": {
                 "psr-4": {
@@ -3104,9 +3106,9 @@
             "description": "Convert standard units from one to another with this easy to use, lightweight package",
             "support": {
                 "issues": "https://github.com/jordanbrauer/unit-converter/issues",
-                "source": "https://github.com/jordanbrauer/unit-converter/tree/v0.8.4"
+                "source": "https://github.com/jordanbrauer/unit-converter/tree/master"
             },
-            "time": "2020-04-28T00:05:02+00:00"
+            "time": "2021-04-08T14:47:23+00:00"
         },
         {
             "name": "knplabs/gaufrette",
@@ -19332,7 +19334,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "jordanbrauer/unit-converter": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
