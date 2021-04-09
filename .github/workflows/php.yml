@@ -12,15 +12,27 @@ jobs:
       - uses: php-actions/composer@v5
         with:
           php_version: 7.3
-          php_extensions: bcmath intl curl simplexml gd mbstring common
+          php_extensions: xdebug bcmath intl gd common
 
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v2
-        with:
-          php_extensions: xdebug
-          php_version: 7.3
-          bootstrap: vendor/autoload.php
-          configuration: test/phpunit.xml
-          args: --coverage-text
-        env:
-          XDEBUG_MODE: coverage
+      - name: run phpunit
+        run: ./vendor/bin/phpunit
+
+      - name: run phpstan
+        run: ./vendor/bin/phpstan
+
+      - name: run phpstan
+        run: ./vendor/bin/phpstan analyse -c phpstan.neon -l max src/
+
+      - name: run psalm
+        run: ./vendor/bin/psalm
+
+#      - name: PHPUnit Tests
+#        uses: php-actions/phpunit@v2
+#        with:
+#          php_extensions: xdebug
+#          php_version: 7.3
+#          bootstrap: vendor/autoload.php
+#          configuration: test/phpunit.xml
+#          args: --coverage-text
+#        env:
+#          XDEBUG_MODE: coverage
