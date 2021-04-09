@@ -12,7 +12,7 @@ jobs:
       - uses: php-actions/composer@v5
         with:
           php_version: 7.3
-          php_extensions: bcmath intl curl simplexml gd mbstring
+          php_extensions: bcmath intl curl simplexml gd mbstring exif
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v2

@@ -12,6 +12,7 @@
         "ext-simplexml": "*",
         "ext-gd": "*",
         "ext-mbstring": "*",
+        "ext-exif": "*",
         "php": "^7.3",
         "friendsofsymfony/oauth-server-bundle": ">2.0.0-alpha.0 ^2.0@dev",
         "jordanbrauer/unit-converter": "dev-master",
