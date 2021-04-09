@@ -68,6 +68,7 @@
             "php bin/create_node_symlink.php"
         ],
         "phpunit": "vendor/bin/phpunit",
-        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon -l max src/"
+        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon -l max src/",
+        "psalm": "vendor/bin/psalm"
     }
 }
