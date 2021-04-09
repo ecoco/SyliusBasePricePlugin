@@ -12,28 +12,9 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-
-    - name: Run unit tests
-      run: composer run-script phpunit
-
-    - name: Run phpstan
-      run: composer run-script phpstan
-
-    - name: Run psalm
-      run: composer run-script psalm
+      uses: php-actions/composer@v5
+      with:
+        php_version: 7.1
+        version: 1
