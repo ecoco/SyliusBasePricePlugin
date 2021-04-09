@@ -64,7 +64,7 @@ before_script:
     - (cd tests/Application && $SYLIUS_CACHE_DIR/symfony server:start --port=8080 --dir=public --daemon)
 
 script:
-    - composer validate
+    - composer validate nono
 
     - vendor/bin/phpstan analyse -c phpstan.neon -l max src/
     - vendor/bin/psalm

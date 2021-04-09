@@ -3,6 +3,8 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE)
 
+[![SymfonyInsight](https://insight.symfony.com/projects/caed611a-2891-4653-8c22-06d96c210c6f/big.svg)](https://insight.symfony.com/projects/caed611a-2891-4653-8c22-06d96c210c6f)
+
 Plugin that calculates and shows product base price
 
 ## Documentation
