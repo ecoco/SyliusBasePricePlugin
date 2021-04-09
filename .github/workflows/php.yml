@@ -32,6 +32,15 @@ jobs:
           php_version: 7.3
           php_extensions: bcmath intl gd exif
 
+      - name: pwd
+        run: pwd
+
+      - name: pwd
+        run: ls -l
+
+      - name: pwd
+        run: ls -l /app/
+
       - name: run phpstan
         run: ./vendor/bin/phpstan analyse -c /app/phpstan.neon -l max src/
 
