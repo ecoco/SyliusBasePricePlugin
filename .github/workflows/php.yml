@@ -1,20 +1,22 @@
-name: PHP Composer
+name: CI-coverage
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-18.04
+  build-test:
+    runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
 
-    - name: Install dependencies
-      uses: php-actions/composer@v5
-      with:
-        php_version: 7.1
-        version: 1
+      - uses: php-actions/composer@v5
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v2
+        with:
+          php_extensions: xdebug
+          bootstrap: vendor/autoload.php
+          configuration: test/phpunit.xml
+          args: --coverage-text
+        env:
+          XDEBUG_MODE: coverage
