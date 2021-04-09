@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Ecocode\SyliusBasePricePlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Sylius\Component\Core\Model\ProductInterface;
 use Ecocode\SyliusBasePricePlugin\Entity\Product\ProductVariantInterface;
 use Sylius\Component\Product\Resolver\ProductVariantResolverInterface;

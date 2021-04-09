@@ -135,7 +135,7 @@ bin/console cache:clear
 1) You will need to have database running. You can use locally installed one or run it using docker.
 
      ```
-     docker -d -rm run -p 3306:3306 -e MYSQL_ROOT_PASSWORD=test -e MYSQL_DATABASE=sylius -e MYSQL_USER=app -e MYSQL_PASSWORD=test mariadb:10.5.9
+     docker run -d --rm -p 3306:3306 -e MYSQL_ROOT_PASSWORD=test -e MYSQL_DATABASE=sylius -e MYSQL_USER=app -e MYSQL_PASSWORD=test mariadb:10.5.9
      ```
 
 2) Then edit and make sure database configuration is correct: 
@@ -165,7 +165,6 @@ cd tests/Application
 yarn install
 yarn run gulp
 bin/console assets:install public -e test
-bin/console doctrine:database:create -e test
 #bin/console doctrine:database:drop --force -e test
 #bin/console doctrine:database:create -e test
 bin/console doctrine:schema:create -e test
@@ -204,12 +203,6 @@ vendor/bin/psalm
 
 ```bash
 vendor/bin/phpstan analyse -c phpstan.neon -l max src/
-```
-
-### Coding Standard
-
-```bash
-vendor/bin/ecs check src
 ```
 
 
