@@ -35,20 +35,17 @@ jobs:
       - name: copy env
         run: cp tests/Application/.env.test tests/Application/.env
 
-      - name: composer.lock
-        run: cat composer.lock
-
-      - name: run phpstan
-        run: "./vendor/bin/phpstan analyse -c phpstan.neon -l max src/"
-
-      - name: run psalm
-        run: ./vendor/bin/psalm
-
-      - name: run phpunit
+      - name: clear cache
         run: php -d memory_limit=-1 ./tests/Application/bin/console ca:cl -e test
 
-      - name: run phpunit
+      - name: phpunit
         run: php -d memory_limit=-1 ./vendor/bin/phpunit
+
+      - name: psalm
+        run: ./vendor/bin/psalm
+
+      - name: phpstan
+        run: "./vendor/bin/phpstan analyse -c phpstan.neon -l max src/"
 
 #      - name: PHPUnit Tests
 #        uses: php-actions/phpunit@v2
