@@ -1,6 +1,6 @@
 name: CI-coverage
 
-on: [push]
+on: ["push", "pull_request"]
 
 jobs:
 
@@ -45,8 +45,9 @@ jobs:
         run: php -d memory_limit=-1 ./tests/Application/bin/console ca:cl -e test
 
       - name: phpunit
-        run: php -d memory_limit=-1 ./vendor/bin/phpunit
+        run: XDEBUG_MODE=coverage php ./vendor/bin/phpunit
 
-      - name: phpunit
-        run: php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-clover clover.xml
-
+      - name: Publish to coveralls.io
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ github.token }}
