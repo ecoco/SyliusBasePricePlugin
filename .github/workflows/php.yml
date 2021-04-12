@@ -39,13 +39,13 @@ jobs:
         run: php -d memory_limit=-1 ./tests/Application/bin/console ca:cl -e test
 
       - name: phpunit
-        run: php -d memory_limit=-1 ./vendor/bin/phpunit
+        run: php -d memory_limit=-1 ./vendor/bin/phpunit --testdox-xml out.xml
 
       - name: psalm
         run: ./vendor/bin/psalm
 
       - name: phpstan
-        run: "./vendor/bin/phpstan analyse -c phpstan.neon -l max src/"
+        run: "./vendor/bin/phpstan analyse -c ./phpstan.neon -l max src/"
 
 #      - name: PHPUnit Tests
 #        uses: php-actions/phpunit@v2
