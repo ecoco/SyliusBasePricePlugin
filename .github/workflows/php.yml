@@ -32,8 +32,11 @@ jobs:
           php_version: 7.3
           php_extensions: bcmath intl gd exif
 
-      - name: phpstan
-        run: "./vendor/bin/phpstan analyse"
+#      - name: phpstan
+#        run: "./vendor/bin/phpstan analyse"
+
+      - name: psalm
+        run: ./vendor/bin/psalm
 
       - name: copy env
         run: cp tests/Application/.env.test tests/Application/.env
@@ -50,5 +53,3 @@ jobs:
       - name: phpunit
         run: php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-clover clover.xml
 
-#      - name: psalm
-#        run: ./vendor/bin/psalm
