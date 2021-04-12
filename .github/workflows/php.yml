@@ -30,7 +30,7 @@ jobs:
       - uses: php-actions/composer@v5
         with:
           php_version: 7.3
-          php_extensions: bcmath intl gd exif
+          php_extensions: bcmath intl gd exif xdebug
 
 #      - name: phpstan
 #        run: "./vendor/bin/phpstan analyse"
@@ -46,9 +46,6 @@ jobs:
 
       - name: phpunit
         run: php -d memory_limit=-1 ./vendor/bin/phpunit
-
-      - name: install xdebug
-        run: /usr/local/bin/install-php-extensions xdebug
 
       - name: phpunit
         run: php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-clover clover.xml
