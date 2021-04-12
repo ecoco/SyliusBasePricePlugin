@@ -48,7 +48,7 @@ jobs:
         run: php -d memory_limit=-1 ./vendor/bin/phpunit
 
       - name: install xdebug
-        run: install-php-extensions xdebug
+        run: /usr/local/bin/install-php-extensions xdebug
 
       - name: phpunit
         run: php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-clover clover.xml
