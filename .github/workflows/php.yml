@@ -45,7 +45,7 @@ jobs:
         run: ./vendor/bin/psalm
 
       - name: phpstan
-        run: "./vendor/bin/phpstan analyse -c ./phpstan.neon -l max src/"
+        run: "./vendor/bin/phpstan analyse --level max src/ --configuration phpstan.neon"
 
 #      - name: PHPUnit Tests
 #        uses: php-actions/phpunit@v2
