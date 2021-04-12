@@ -42,26 +42,13 @@ jobs:
         run: php -d memory_limit=-1 ./tests/Application/bin/console ca:cl -e test
 
       - name: phpunit
-        run: php -d memory_limit=-1 ./vendor/bin/phpunit --testdox-xml out.xml
+        run: php -d memory_limit=-1 ./vendor/bin/phpunit
 
-      - name: psalm
-        run: ./vendor/bin/psalm
+      - name: install xdebug
+        run: install-php-extensions xdebug
 
+      - name: phpunit
+        run: php -d memory_limit=-1 ./vendor/bin/phpunit --coverage-clover clover.xml
 
-#      - name: PHPUnit Tests
-#        uses: php-actions/phpunit@v2
-#        with:
-#          php_extensions: xdebug
-#          php_version: 7.3
-#          bootstrap: vendor/autoload.php
-#          configuration: test/phpunit.xml
-#          args: --coverage-text
-#        env:
-#          XDEBUG_MODE: coverage
-
-
-# wget https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions
-# mv install-php-extensions /usr/local/bin/
-# chmod +x /usr/local/bin/install-php-extensions
-# sync
-# install-php-extensions bcmath intl gd exif
+#      - name: psalm
+#        run: ./vendor/bin/psalm
