@@ -38,19 +38,8 @@ jobs:
       - name: psalm
         run: ./vendor/bin/psalm
 
-#      - name: copy env
-#        run: cp tests/Application/.env.test tests/Application/.env
-
       - name: clear cache
         run: php -d memory_limit=-1 ./tests/Application/bin/console ca:cl -e test
 
       - name: phpunit
-        run: XDEBUG_MODE=coverage php ./vendor/bin/phpunit
-
-      - name: coveralls
-        run: ./vendor/bin/php-coveralls
-
-      - name: Publish to coveralls.io
-        uses: coverallsapp/github-action@v1.1.2
-        with:
-          github-token: ${{ github.token }}
+        run: php ./vendor/bin/phpunit
