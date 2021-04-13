@@ -21,7 +21,9 @@ security:
                 providers: [sylius_api_shop_user_provider, sylius_api_admin_user_provider]
 
     encoders:
-        Sylius\Component\User\Model\UserInterface: argon2i
+        Sylius\Component\User\Model\UserInterface:
+            algorithm: sha512
+        argon2i  : sha512
     firewalls:
         admin:
             switch_user: true
