@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Ecocode\SyliusBasePricePlugin\Application\Services;
+namespace Tests\Ecocode\SyliusBasePricePlugin\Application\Tests\Services;
 
 use Ecocode\SyliusBasePricePlugin\Services\Calculator;
 use Ecocode\SyliusBasePricePlugin\Services\ConverterFactory;

@@ -10,7 +10,7 @@ use RuntimeException;
 use Sylius\Bundle\MoneyBundle\Templating\Helper\ConvertMoneyHelper;
 use Sylius\Bundle\MoneyBundle\Templating\Helper\ConvertMoneyHelperInterface;
 use Sylius\Bundle\MoneyBundle\Templating\Helper\FormatMoneyHelper;
-use Sylius\Component\Core\Model\Channel;
+use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ChannelPricingInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface as CoreModelProductVariantInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -103,14 +103,14 @@ class Calculator extends AbstractExtension
 
     /**
      * @param ProductVariantInterface $productVariant
-     * @param Channel                 $channel
+     * @param ChannelInterface        $channel
      * @param string                  $currencyCode current currency code
      *
      * @return string|null
      */
     public function calculate(
         ProductVariantInterface $productVariant,
-        Channel $channel,
+        ChannelInterface $channel,
         string $currencyCode
     ): ?string {
         if (!$productVariant instanceof CoreModelProductVariantInterface) {
@@ -183,7 +183,7 @@ class Calculator extends AbstractExtension
     }
 
     private function getBasePriceFormatParams(
-        Channel $channel,
+        ChannelInterface $channel,
         ChannelPricingInterface $channelPricing,
         Mapping $mapping,
         float $targetUnitSize,

@@ -32,8 +32,8 @@ final class ProductVariantsBasePriceExtension extends AbstractExtension
         ChannelContextInterface $channelContext,
         CurrencyContextInterface $currencyContext
     ) {
-        $this->channelContext  = $channelContext;
         $this->calculator      = $calculator;
+        $this->channelContext  = $channelContext;
         $this->currencyContext = $currencyContext;
     }
 
