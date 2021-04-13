@@ -5,6 +5,10 @@
 
 [![SymfonyInsight](https://insight.symfony.com/projects/caed611a-2891-4653-8c22-06d96c210c6f/big.svg)](https://insight.symfony.com/projects/caed611a-2891-4653-8c22-06d96c210c6f)
 
+[![Code Coverage](https://scrutinizer-ci.com/g/ecoco/SyliusBasePricePlugin/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/ecoco/SyliusBasePricePlugin/?branch=main)
+[![Code Coverage](https://scrutinizer-ci.com/g/ecoco/SyliusBasePricePlugin/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/ecoco/SyliusBasePricePlugin/?branch=main)
+[![Build Status](https://scrutinizer-ci.com/g/ecoco/SyliusBasePricePlugin/badges/build.png?b=main)](https://scrutinizer-ci.com/g/ecoco/SyliusBasePricePlugin/build-status/main)
+
 Plugin that calculates and shows product base price
 
 ## Documentation
