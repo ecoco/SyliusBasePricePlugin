@@ -1,4 +1,4 @@
-name: CI-coverage
+name: Psalm tests
 
 on: ["push", "pull_request"]
 
@@ -32,14 +32,5 @@ jobs:
           php_version: 7.3
           php_extensions: bcmath intl gd exif xdebug
 
-#      - name: phpstan
-#        run: "./vendor/bin/phpstan analyse"
-
       - name: psalm
         run: ./vendor/bin/psalm
-
-      - name: clear cache
-        run: php -d memory_limit=-1 ./tests/Application/bin/console ca:cl -e test
-
-      - name: phpunit
-        run: php ./vendor/bin/phpunit
