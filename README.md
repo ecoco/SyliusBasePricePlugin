@@ -132,6 +132,16 @@ bin/console cache:clear
 
 # Testing
 
+
+## Using docker
+
+Simplest way to test pack (excluding behat) is to run library using given Dockerfile
+
+```
+docker build . -t sylius-base-price-plugin
+docker run -v $(pwd)/build:/var/www/html/build -e XDEBUG_MODE=coverage sylius-base-price-plugin composer test
+```
+
 ## Setup
 
 1) You will need to have database running. You can use locally installed one or run it using docker.
