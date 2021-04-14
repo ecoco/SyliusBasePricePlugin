@@ -5,25 +5,26 @@ FROM node:${NODE_VERSION}-alpine AS nodejs
 WORKDIR /app
 RUN apk add --no-cache --virtual .build-deps g++ gcc git make python
 COPY tests/Application/ ./
-RUN yarn install; yarn cache clean
+RUN yarn install; yarn run gulp ; yarn cache clean
 
 
 FROM php:${PHP_VERSION}-cli-alpine
 
 ENV APP_DIR=/var/www/html
-ENV PATH="${PATH}:${APP_DIR}/vendor/bin"
+ENV PATH="${PATH}:${APP_DIR}/vendor/bin:${APP_DIR}/tests/Application/bin"
 ENV APP_ENV=test
 
 RUN apk add --update --no-cache zip git bash openssh
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions && sync
-RUN install-php-extensions bcmath intl gd exif xdebug
+RUN install-php-extensions bcmath intl gd exif pdo_mysql xdebug
 
 RUN cp $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 RUN sed -i 's/memory_limit = 128M/memory_limit = -1/' $PHP_INI_DIR/php.ini
 
 COPY --from=composer:2.0.12 /usr/bin/composer /usr/bin/composer
+RUN wget https://get.symfony.com/cli/installer -O - | bash
 
 WORKDIR ${APP_DIR}
 
@@ -47,4 +48,12 @@ COPY tests            tests
 COPY --from=nodejs /app/node_modules tests/Application/node_modules
 
 RUN composer install --optimize-autoloader
+RUN ./tests/Application/bin/console assets:install public
+
 RUN ./tests/Application/bin/console cache:clear
+
+RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+
+EXPOSE 8080
+RUN symfony server:ca:install
+ENTRYPOINT ["symfony", "server:start", "--port=8080", "--allow-http", "--dir=tests/Application/public"]

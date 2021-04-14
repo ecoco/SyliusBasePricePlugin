@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+
+  phpfpm:
+    build: .
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: 'mysql://app:test@db/sylius'
+    ports:
+      - "8080:8080"
+
+  db:
+    image: mariadb:10.5.8
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=sylius
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=test
+
+  chrome-headless:
+    image: wormhit/chrome-stable-headless:88.0.4324.182-1
+    volumes:
+      - /dev/shm:/dev/shm

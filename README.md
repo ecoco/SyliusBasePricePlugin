@@ -142,6 +142,15 @@ docker build . -t sylius-base-price-plugin
 docker run -v $(pwd)/build:/var/www/html/build -e XDEBUG_MODE=coverage sylius-base-price-plugin composer test
 ```
 
+```
+docker-compose up -d
+docker-compose exec phpfpm console doctrine:schema:create
+docker-compose exec phpfpm console sylius:fixtures:load
+docker-compose exec phpfpm console doctrine:schema:update --dump-sql --force
+
+```
+
+
 ## Setup
 
 1) You will need to have database running. You can use locally installed one or run it using docker.
@@ -177,12 +186,15 @@ cd tests/Application
 yarn install
 yarn run gulp
 bin/console assets:install public -e test
+bin/console cache:clear -e test
 #bin/console doctrine:database:drop --force -e test
 #bin/console doctrine:database:create -e test
 bin/console doctrine:schema:create -e test
 bin/console sylius:fixtures:load -e test
-bin/console cache:clear -e test
 bin/console doctrine:schema:update --dump-sql --force -e test
+
+
+
 
 # If you want to develop something this is one way of starting dev server.
 # Later on we will use symfony server because it can handle https way easier.
