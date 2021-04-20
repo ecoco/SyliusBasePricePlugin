@@ -261,6 +261,8 @@ vendor/bin/phpstan analyse -c phpstan.neon -l max src/
 
     4. Run Behat:
 
+     Uncomment local configuration in `behat.yml.dist` (and comment out docker-compose one)
+
      ```bash
      vendor/bin/behat --strict --tags="@javascript"
      ```
