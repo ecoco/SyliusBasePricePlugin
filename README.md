@@ -133,25 +133,31 @@ bin/console cache:clear
 # Testing
 
 
-## Using docker
+## Using docker-compose (suggested)
 
-Simplest way to test pack (excluding behat) is to run library using given Dockerfile
+```
+docker-compose up -d
+docker-compose exec php bash -c "XDEBUG_MODE=coverage composer test"
+#docker-compose exec php console doctrine:database:drop --force
+#docker-compose exec php console doctrine:database:create
+docker-compose exec php console doctrine:schema:update --force
+docker-compose exec php console sylius:fixtures:load
+docker-compose exec php behat
+docker-compose down
+```
+
+
+# Using docker
+
+Using this test method you will not be able to test behat so easily
 
 ```
 docker build . -t sylius-base-price-plugin
 docker run -v $(pwd)/build:/var/www/html/build -e XDEBUG_MODE=coverage sylius-base-price-plugin composer test
 ```
 
-```
-docker-compose up -d
-docker-compose exec phpfpm console doctrine:schema:create
-docker-compose exec phpfpm console sylius:fixtures:load
-docker-compose exec phpfpm console doctrine:schema:update --dump-sql --force
 
-```
-
-
-## Setup
+# Locally (complex)
 
 1) You will need to have database running. You can use locally installed one or run it using docker.
 

@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+
+  php:
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8080:8080"

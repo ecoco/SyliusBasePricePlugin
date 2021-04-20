@@ -56,4 +56,5 @@ RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
 EXPOSE 8080
 RUN symfony server:ca:install
-ENTRYPOINT ["symfony", "server:start", "--port=8080", "--allow-http", "--dir=tests/Application/public"]
+
+CMD ["symfony", "server:start", "--port=8080", "--allow-http", "--dir=tests/Application/public"]

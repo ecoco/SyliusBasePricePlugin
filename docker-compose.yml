@@ -2,16 +2,12 @@ version: '3.7'
 
 services:
 
-  phpfpm:
+  php:
     build: .
-    volumes:
-      - .:/var/www/html
     depends_on:
       - db
     environment:
       DATABASE_URL: 'mysql://app:test@db/sylius'
-    ports:
-      - "8080:8080"
 
   db:
     image: mariadb:10.5.8
