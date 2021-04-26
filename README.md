@@ -44,20 +44,9 @@ return [
 
 ### Configure
 
-```shell
-# config/packages/ecocode_sylius_base_price_plugin.yaml
+You need to copy config file to project:
 
-imports:
-    - { resource: "@EcocodeSyliusBasePricePlugin/Resources/config/config.yaml" }
-
-# Custom config override
-# Mapping config will not be merged so all default mapping will be gone
-#ecocode_sylius_base_price:
-#    use_short_unit_name: false
-#    mapping:
-#        UnitConverter\Measure::VOLUME:
-#            - { unit: UnitConverter\Unit\Volume\Millilitre, mod: 10 }
-```
+[config/packages/ecocode_sylius_base_price_plugin.yaml](data/config/packages/ecocode_sylius_base_price_plugin.yaml)
 
 ## Advanced configuration
 
@@ -72,27 +61,7 @@ Its default values are defined in `src/Resources/config/config.yaml`
 
 Add trait and interface to existing entity.
 
-```php
-<?php
-# src/Entity/Product/ProductVariant.php
-declare(strict_types=1);
-
-namespace App\Entity\Product;
-
-use Doctrine\ORM\Mapping as ORM;
-use Ecocode\SyliusBasePricePlugin\Entity\Product\ProductVariantInterface;
-use Ecocode\SyliusBasePricePlugin\Entity\Product\ProductVariantTrait;
-use Sylius\Component\Core\Model\ProductVariant as BaseProductVariant;
-
-/**
- * @ORM\Entity
- * @ORM\Table(name="sylius_product_variant")
- */
-class ProductVariant extends BaseProductVariant implements ProductVariantInterface
-{
-    use ProductVariantTrait;
-}
-```
+[src/Entity/Product/ProductVariant.php](data/src/Entity/Product/ProductVariant.php)
 
 ### Run migration
 
