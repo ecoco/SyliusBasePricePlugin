@@ -104,6 +104,9 @@ bin/console cache:clear
 
 ## Using docker-compose (suggested)
 
+First you will need to edit `edit behat.yml.dist` and uncomment lines related to docker-compose.
+
+Then you can boot it up. Prepare database and run tests.
 ```
 docker-compose up -d
 docker-compose exec php bash -c "XDEBUG_MODE=coverage composer test"
