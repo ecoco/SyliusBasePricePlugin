@@ -38,7 +38,7 @@ class AdminProductVariantFormMenuListenerTest extends TestCase
         );
 
         $this->assertEquals(
-            '@EcocodeSyliusBasePricePlugin/Resources/views/Admin/ProductVariant/Tab/baseprice.html.twig',
+            '@EcocodeSyliusBasePricePlugin/Admin/ProductVariant/Tab/baseprice.html.twig',
             $menuItem->getChild('base_price')->getAttribute('template')
         );
     }
