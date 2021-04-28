@@ -27,7 +27,7 @@ final class AdminProductVariantFormMenuListener
     {
         $menu = $event->getMenu();
 
-        $view = '@EcocodeSyliusBasePricePlugin/Resources/views/Admin/ProductVariant/Tab/baseprice.html.twig';
+        $view = '@EcocodeSyliusBasePricePlugin/Admin/ProductVariant/Tab/baseprice.html.twig';
         $menu
             ->addChild('base_price', ['position' => 1])
             ->setAttribute('template', $view)

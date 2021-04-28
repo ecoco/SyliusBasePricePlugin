@@ -48,7 +48,7 @@ You need to copy config file to project:
 
 [config/packages/ecocode_sylius_base_price_plugin.yaml](data/config/packages/ecocode_sylius_base_price_plugin.yaml)
 
-## Advanced configuration
+### Advanced configuration
 
 If you want to have more control over what metrics are visible and how it will be converted then you should update:
 

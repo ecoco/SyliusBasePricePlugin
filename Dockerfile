@@ -18,12 +18,12 @@ RUN apk add --update --no-cache zip git bash openssh
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions && sync
-RUN install-php-extensions bcmath intl gd exif pdo_mysql xdebug
+RUN install-php-extensions bcmath intl gd exif fileinfo pdo_mysql xdebug
 
 RUN cp $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 RUN sed -i 's/memory_limit = 128M/memory_limit = -1/' $PHP_INI_DIR/php.ini
 
-COPY --from=composer:2.0.12 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN wget https://get.symfony.com/cli/installer -O - | bash
 
 WORKDIR ${APP_DIR}
