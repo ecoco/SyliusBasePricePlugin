@@ -14,12 +14,11 @@
         "ext-mbstring": "*",
         "ext-exif": "*",
         "php": "^7.3",
-        "friendsofsymfony/oauth-server-bundle": "^1.6 || >2.0.0-alpha.0 ^2.0@dev",
         "jordanbrauer/unit-converter": "^0.8",
         "sylius/sylius": "^1.9.1"
     },
-
     "require-dev": {
+        "friendsofsymfony/oauth-server-bundle": "^1.6 || >2.0.0-alpha.0 ^2.0@dev",
         "behat/behat": "^3.8.1",
         "behat/mink-selenium2-driver": "^1.4",
         "dmore/behat-chrome-extension": "^1.3",
