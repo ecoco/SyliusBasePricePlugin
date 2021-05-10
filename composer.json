@@ -1,7 +1,7 @@
 {
     "name": "ecoco/sylius-base-price-plugin",
     "type": "sylius-plugin",
-    "keywords": ["sylius", "sylius-plugin", "symfony-bundle", "ecoco"],
+    "keywords": ["sylius", "sylius-plugin", "ecoco"],
     "description": "Sylius base price plugin will show product base price next to its price and in cart",
     "license": "MIT",
 
@@ -14,8 +14,9 @@
         "ext-mbstring": "*",
         "ext-exif": "*",
         "php": "^7.3",
+        "friendsofsymfony/oauth-server-bundle": "^1.6 || >2.0.0-alpha.0 ^2.0@dev",
         "jordanbrauer/unit-converter": "^0.8",
-        "sylius/sylius": "^1.9.1"
+        "sylius/sylius": "^1.8 || ^1.9"
     },
     "require-dev": {
         "behat/behat": "^3.8.1",
@@ -39,7 +40,7 @@
         "phpunit/phpunit": "^8.5",
         "sensiolabs/security-checker": "^6.0",
         "sylius-labs/coding-standard": "^3.2",
-        "symfony/browser-kit": "*",
+        "symfony/browser-kit": "^4.4|^5.0",
         "symfony/debug-bundle": "^4.4|^5.0",
         "symfony/dotenv": "^4.4|^5.0",
         "symfony/intl": "^4.4|^5.0",
@@ -47,7 +48,6 @@
         "symfony/web-server-bundle": "^4.4|^5.0",
         "vimeo/psalm": "3.11.4"
     },
-    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Ecocode\\SyliusBasePricePlugin\\": "src/",
