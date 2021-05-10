@@ -16,7 +16,7 @@
         "php": "^7.3",
         "friendsofsymfony/oauth-server-bundle": "^1.6 || >2.0.0-alpha.0 ^2.0@dev",
         "jordanbrauer/unit-converter": "^0.8",
-        "sylius/sylius": "^1.9"
+        "sylius/sylius": "^1.9.1"
     },
 
     "require-dev": {
@@ -49,6 +49,7 @@
         "symfony/web-server-bundle": "^4.4|^5.0",
         "vimeo/psalm": "3.11.4"
     },
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Ecocode\\SyliusBasePricePlugin\\": "src/",
