@@ -18,6 +18,7 @@
         "sylius/sylius": "^1.9.1"
     },
     "require-dev": {
+        "babdev/pagerfanta-bundle": "^2.10",
         "friendsofsymfony/oauth-server-bundle": "^1.6 || >2.0.0-alpha.0 ^2.0@dev",
         "behat/behat": "^3.8.1",
         "behat/mink-selenium2-driver": "^1.4",
