@@ -32,6 +32,8 @@ composer require ecoco/sylius-base-price-plugin
 
 ### Enable plugin
 
+*this step is done automatically by symfony.
+
 Register the plugin by adding it to your `config/bundles.php` file
 
 ```php
@@ -46,7 +48,12 @@ return [
 
 You need to copy config file to project:
 
+
 [config/packages/ecocode_sylius_base_price_plugin.yaml](data/config/packages/ecocode_sylius_base_price_plugin.yaml)
+
+```bash
+cp vendor/ecoco/sylius-base-price-plugin/data/config/packages/ecocode_sylius_base_price_plugin.yaml config/packages/ecocode_sylius_base_price_plugin.yaml
+```
 
 ### Advanced configuration
 
@@ -62,6 +69,10 @@ Its default values are defined in `src/Resources/config/config.yaml`
 Add trait and interface to existing entity.
 
 [src/Entity/Product/ProductVariant.php](data/src/Entity/Product/ProductVariant.php)
+
+```bash
+cp vendor/ecoco/sylius-base-price-plugin/data/src/Entity/Product/ProductVariant.php src/Entity/Product/ProductVariant.php
+```
 
 ### Run migration
 
