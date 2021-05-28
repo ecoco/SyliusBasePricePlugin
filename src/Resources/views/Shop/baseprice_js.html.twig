@@ -5,7 +5,7 @@
 
         function ecocodeBasePricePluginDraw() {
             const el = $('#product-price-base_price');
-            if ('undefined' !== typeof el) {
+            if (el.length) {
                 const texts = JSON.parse(el.attr('data-base-price-text'));
                 const size = texts.length;
                 if (!size) {
