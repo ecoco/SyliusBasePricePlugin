@@ -1,7 +1,7 @@
 ARG NODE_VERSION=10
 ARG PHP_VERSION=7.3
 
-FROM node:${NODE_VERSION}-alpine AS nodejs
+FROM node:${NODE_VERSION}-alpine3.10 AS nodejs
 WORKDIR /app
 RUN apk add --no-cache --virtual .build-deps g++ gcc git make python
 COPY tests/Application/ ./
