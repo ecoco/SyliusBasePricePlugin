@@ -36,12 +36,17 @@ final class EcocodeSyliusBasePriceExtension extends Extension
             }
         }
 
+        /** @var array<array-key, mixed> $config */
         $config = $this->processConfiguration($this->getConfiguration([], $container), $config);
+        /** @var int $shortNameConfig */
+        $shortNameConfig = $config['use_short_unit_name'];
+        /** @var array<array-key, mixed> $configMapping */
+        $configMapping = $config['mapping'];
 
         $container->setParameter('ecocode_sylius_base_price', $config);
-        $container->setParameter('ecocode_sylius_base_price.mapping', $config['mapping']);
+        $container->setParameter('ecocode_sylius_base_price.mapping', $configMapping);
         $container->setParameter('ecocode_sylius_base_price.measurements', array_keys((array)$config['mapping']));
-        $container->setParameter('ecocode_sylius_base_price.use_short_unit_name', $config['use_short_unit_name']);
+        $container->setParameter('ecocode_sylius_base_price.use_short_unit_name', $shortNameConfig);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 

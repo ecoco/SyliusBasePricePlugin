@@ -144,19 +144,26 @@ class Calculator extends AbstractExtension
                     continue;
                 }
 
-                $selected = [$mapping, $targetUnitSize];
+                $selected = compact('mapping', 'channelPricing', 'targetUnitSize');
             }
         }
 
-        if (empty($selected)) {
+        if ($selected === []) {
             return null;
         }
 
+        /** @var ChannelPricingInterface $channelPricing */
+        $channelPricing = $selected['channelPricing'];
+        /** @var Mapping $mapping */
+        $mapping        = $selected['mapping'];
+        $targetUnitSize = (float)$selected['targetUnitSize'];
+
+        /** @var array $params */
         $params = $this->getBasePriceFormatParams(
             $channel,
             $channelPricing,
-            $selected[0],
-            (float)$selected[1],
+            $mapping,
+            $targetUnitSize,
             $currencyCode
         );
 
