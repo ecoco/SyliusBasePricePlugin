@@ -29,10 +29,10 @@ RUN wget https://get.symfony.com/cli/installer -O - | bash
 WORKDIR ${APP_DIR}
 
 #COPY vendor vendor
+#COPY composer.lock ./
 
-COPY composer.lock ./
 COPY composer.json ./
-RUN composer install --no-scripts --no-progress --no-autoloader
+RUN COMPOSER_MEMORY_LIMIT=-1 composer install --no-scripts --no-progress --no-autoloader
 
 COPY behat.yml.dist   ./
 COPY phpspec.yml.dist ./
@@ -47,7 +47,7 @@ COPY src              src
 COPY tests            tests
 COPY --from=nodejs /app/node_modules tests/Application/node_modules
 
-RUN composer install --optimize-autoloader
+RUN COMPOSER_MEMORY_LIMIT=-1 composer install --optimize-autoloader
 RUN ./tests/Application/bin/console assets:install public
 
 RUN ./tests/Application/bin/console cache:clear

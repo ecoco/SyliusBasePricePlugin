@@ -16,7 +16,7 @@
         "php": "^7.3",
         "friendsofsymfony/oauth-server-bundle": "^1.6 || >2.0.0-alpha.0 ^2.0@dev",
         "jordanbrauer/unit-converter": "^0.8",
-        "sylius/sylius": "^1.9"
+        "sylius/sylius": "^1.8 || ^1.9"
     },
     "require-dev": {
         "behat/behat": "^3.8.1",
