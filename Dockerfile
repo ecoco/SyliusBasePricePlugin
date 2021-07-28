@@ -1,14 +1,14 @@
 ARG NODE_VERSION=10
 ARG PHP_VERSION=7.3
 
-FROM node:${NODE_VERSION}-alpine3.10 AS nodejs
+FROM node:${NODE_VERSION}-alpine AS nodejs
 WORKDIR /app
 RUN apk add --no-cache --virtual .build-deps g++ gcc git make python
 COPY tests/Application/ ./
 RUN yarn install; yarn run gulp ; yarn cache clean
 
 
-FROM php:${PHP_VERSION}-cli-alpine
+FROM php:${PHP_VERSION}-cli-alpine3.10
 
 ENV APP_DIR=/var/www/html
 ENV PATH="${PATH}:${APP_DIR}/vendor/bin:${APP_DIR}/tests/Application/bin"
