@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use UnitConverter\Unit\Mass\Gram;
 use UnitConverter\Unit\Mass\Kilogram;
+use UnitConverter\Unit\Mass\Tonne;
 use UnitConverter\Unit\Volume\Litre;
 use UnitConverter\Unit\Volume\Millilitre;
 use UnitConverter\Unit\DigitalStorage\Terabyte;
@@ -225,6 +226,42 @@ return [
             'mapping'   => [
                 'UnitConverter\Measure::DIGITAL_STORAGE' => [
                     ['unit' => Megabyte::class, 'mod' => 100, 'ifMoreThan' => 0],
+                ],
+            ],
+        ],
+    ],
+    '#12' => [
+        'expected' => '€38.31 / kg',
+        'unit'     => new Gram(),
+        'size'     => 261,
+        'price'    => 1000,
+        'currency' => 'EUR',
+        'locale'   => 'en',
+        'config'   => [
+            'use_short' => true,
+            'mapping'   => [
+                'UnitConverter\Measure::MASS' => [
+                    ['unit' => Gram::class, 'mod' => 100, 'ifMoreThan' => 0],
+                    ['unit' => Kilogram::class, 'mod' => 1, 'ifMoreThan' => 0.25],
+                    ['unit' => Tonne::class, 'mod' => 1, 'ifMoreThan' => 50],
+                ],
+            ],
+        ],
+    ],
+    '#13' => [
+        'expected' => '€9.99 / t',
+        'unit'     => new Gram(),
+        'size'     => 50000001, // 5t and 1g
+        'price'    => 50000,
+        'currency' => 'EUR',
+        'locale'   => 'en',
+        'config'   => [
+            'use_short' => true,
+            'mapping'   => [
+                'UnitConverter\Measure::MASS' => [
+                    ['unit' => Gram::class, 'mod' => 100, 'ifMoreThan' => 0],
+                    ['unit' => Kilogram::class, 'mod' => 1, 'ifMoreThan' => 0.25],
+                    ['unit' => Tonne::class, 'mod' => 1, 'ifMoreThan' => 50],
                 ],
             ],
         ],

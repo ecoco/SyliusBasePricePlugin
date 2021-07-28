@@ -24,6 +24,8 @@ use function constant;
  */
 class Calculator extends AbstractExtension
 {
+    const PRECISION = 6;
+
     /** @var array<string, array<string, array<string, string|float>>> */
     private $mappingConfig = [];
 
@@ -119,11 +121,12 @@ class Calculator extends AbstractExtension
 
         $measurementMapping = $this->getMeasurementMapping($productVariant);
 
+        $selected = [];
         foreach ($measurementMapping as $mappings) {
             $this
                 ->getUnitConverter()
                 ->from((string)$productVariant->getBasePriceUnit())
-                ->convert((string)$productVariant->getBasePriceValue());
+                ->convert((string)$productVariant->getBasePriceValue(), self::PRECISION);
 
             foreach ($mappings as $mapping) {
                 $symbol         = $mapping->getUnitClass()->getSymbol();
@@ -141,19 +144,23 @@ class Calculator extends AbstractExtension
                     continue;
                 }
 
-                $params = $this->getBasePriceFormatParams(
-                    $channel,
-                    $channelPricing,
-                    $mapping,
-                    (float)$targetUnitSize,
-                    $currencyCode
-                );
-
-                return $this->translator->trans('ecocode_sylius_base_price_plugin.format', $params);
+                $selected = [$mapping, $targetUnitSize];
             }
         }
 
-        return null;
+        if (empty($selected)) {
+            return null;
+        }
+
+        $params = $this->getBasePriceFormatParams(
+            $channel,
+            $channelPricing,
+            $selected[0],
+            (float)$selected[1],
+            $currencyCode
+        );
+
+        return $this->translator->trans('ecocode_sylius_base_price_plugin.format', $params);
     }
 
     /**
