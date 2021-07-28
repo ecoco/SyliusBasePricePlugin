@@ -29,15 +29,15 @@ ecocode_sylius_base_price:
     mapping:
         UnitConverter\Measure::MASS:                                                     # --- MASS
             - { unit: UnitConverter\Unit\Mass\Gram,         mod: 100                   } # <= 250 g = 100 g
-            - { unit: UnitConverter\Unit\Mass\Kilogram,     mod: 1,   ifMoreThan: 0.25 } # >  250 g = kg
+            - { unit: UnitConverter\Unit\Mass\Kilogram,     mod: 1,   ifMoreThan: 1    } # >  1 kg = kg
             - { unit: UnitConverter\Unit\Mass\Tonne,        mod: 1,   ifMoreThan: 50   } # >  50 kg = t
         UnitConverter\Measure::VOLUME:                                                   # --- VOLUME
             - { unit: UnitConverter\Unit\Volume\Millilitre, mod: 100                   } # <= 250 ml = 100 ml
-            - { unit: UnitConverter\Unit\Volume\Litre,      mod: 1,   ifMoreThan: 0.25 } # >  250 l  = l
+            - { unit: UnitConverter\Unit\Volume\Litre,      mod: 1,   ifMoreThan: 1    } # >  1 l  = l
             - { unit: UnitConverter\Unit\Volume\Litre,      mod: 100, ifMoreThan: 100  } # >  100 l  = 100 l
         UnitConverter\Measure::LENGTH:                                                   # --- LENGTH
             - { unit: UnitConverter\Unit\Length\Millimetre, mod: 1                     } # <= 250 mm = 100 mm
-            - { unit: UnitConverter\Unit\Length\Metre,      mod: 100, ifMoreThan: 0.25 } # >  250 mm = m
+            - { unit: UnitConverter\Unit\Length\Metre,      mod: 1,   ifMoreThan: 1    } # >  1 m = m
             - { unit: UnitConverter\Unit\Length\Metre,      mod: 100, ifMoreThan: 100  } # >  100 m  = 100 m
             - { unit: UnitConverter\Unit\Length\Kilometre,  mod: 1,   ifMoreThan: 1    } # >  1 km   = km
         UnitConverter\Measure::AREA:                                                     # --- AREA
