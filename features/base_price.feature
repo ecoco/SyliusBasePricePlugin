@@ -18,14 +18,14 @@ Feature: Product Base Price
 
         Examples:
             | product       | currency | price   | unit | value | base_price       | base_price_attr            |
-            | "Milk 0.5L"   |  "USD"   | "$0.50" | "mL" | 500   | "$0.10 / 100 ml" | '["$0.10 \/ 100 ml"]'      |
-            | "Milk 1L"     |  "USD"   | "$1.00" | "L"  | 1     | "$0.10 / 100 ml" | '["$0.10 \/ 100 ml"]'      |
+            | "Milk 0.5L"   |  "USD"   | "$0.50" | "mL" | 500   | "$1.00 / l"     | '["$1.00 \/ l"]'           |
+            | "Milk 1L"     |  "USD"   | "$1.00" | "L"  | 1     | "$1.00 / l"     | '["$1.00 \/ l"]'           |
             | "Milk 2L"     |  "EUR"   | "€1.50" | "L"  | 2     | "€0.75 / l"      | '["\u20ac0.75 \/ l"]'      |
             | "Milk 3L"     |  "GBP"   | "£1.90" | "L"  | 3     | "£0.63 / l"      | '["\u00a30.63 \/ l"]'      |
-            | "Sugar 500g"  |  "USD"   | "$1.00" | "g"  | 500   | "$0.20 / 100 g"  | '["$0.20 \/ 100 g"]'       |
-            | "Sugar 1kg"   |  "EUR"   | "€1.40" | "kg" | 1     | "€0.14 / 100 g"  | '["\u20ac0.14 \/ 100 g"]'  |
+            | "Sugar 500g"  |  "USD"   | "$1.00" | "g"  | 500   | "$2.00 / kg"     | '["$2.00 \/ kg"]'       |
+            | "Sugar 1kg"   |  "EUR"   | "€1.40" | "kg" | 1     | "€1.40 / kg"  | '["\u20ac1.40 \/ kg"]'  |
             | "Sugar 1500g" |  "GBP"   | "£1.99" | "g"  | 1500  | "£1.32 / kg"     | '["\u00a31.32 \/ kg"]'     |
-            | "Wire 1m"     |  "GBP"   | "£100"  | "m"  | 1     | "£0.10 / mm"     | '["\u00a30.10 \/ mm"]'     |
+            | "Wire 1m"     |  "GBP"   | "£100"  | "m"  | 1     | "£100.00 / m" | '["\u00a3100.00 \/ m"]'     |
             | "Tiles 11 m2" |  "EUR"   | "€18"   | "m2" | 11    | "€1.63 / m2"     | '["\u20ac1.63 \/ m2"]'     |
 
 
@@ -40,10 +40,13 @@ Feature: Product Base Price
         Then I should see in cart product <product> base price <base_price>
 
         Examples:
-            | product   | currency | price   | unit | value | base_price       |
-            | "Milk 1L" |  "USD"   | "$1.00" | "L"  | 1     | "$0.10 / 100 ml" |
-            | "Milk 1L" |  "EUR"   | "€1.00" | "L"  | 1     | "€0.10 / 100 ml" |
-            | "Milk 1L" |  "GBP"   | "£1.00" | "L"  | 1     | "£0.10 / 100 ml" |
+            | product      | currency | price   | unit  | value   | base_price       |
+            | "Milk 1L"    |  "USD"   | "$1.00" | "L"   | 1       | "$1.00 / l"      |
+            | "Milk 1L"    |  "EUR"   | "€1.00" | "L"   | 1       | "€1.00 / l"      |
+            | "Milk 1L"    |  "GBP"   | "£1.00" | "L"   | 1       | "£1.00 / l"      |
+            | "Milk 200mL" |  "USD"   | "$1.00" | "mL"  | 200     | "$0.50 / 100 ml" |
+            | "Milk 200mL" |  "EUR"   | "€1.00" | "mL"  | 200     | "€0.50 / 100 ml" |
+            | "Milk 200mL" |  "GBP"   | "£1.00" | "mL"  | 200     | "£0.50 / 100 ml" |
 
 
     @javascript @ui
@@ -62,7 +65,10 @@ Feature: Product Base Price
         Then I should see in cart product <product> base price <base_price>
 
         Examples:
-            | product   | currency | other_currency | price   | unit | value |  base_price       |
-            | "Milk 1L" |  "USD"   | "EUR"          | "$1.00" | "L"  | 1     | "$0.10 / 100 ml"  |
-            | "Milk 1L" |  "EUR"   | "GBP"          | "€1.00" | "L"  | 1     | "€0.10 / 100 ml"  |
-            | "Milk 1L" |  "GBP"   | "EUR"          | "£1.00" | "L"  | 1     | "£0.10 / 100 ml"  |
+            | product      | currency | other_currency | price   | unit  | value   |  base_price       |
+            | "Milk 1L"    |  "USD"   | "EUR"          | "$1.00" | "L"   | 1       | "$1.00 / l"       |
+            | "Milk 1L"    |  "EUR"   | "GBP"          | "€1.00" | "L"   | 1       | "€1.00 / l"       |
+            | "Milk 1L"    |  "GBP"   | "EUR"          | "£1.00" | "L"   | 1       | "£1.00 / l"       |
+            | "Milk 200mL" |  "USD"   | "EUR"          | "$1.00" | "mL"  | 200     | "$0.50 / 100 ml"  |
+            | "Milk 200mL" |  "EUR"   | "GBP"          | "$1.00" | "mL"  | 200     | "€0.50 / 100 ml"  |
+            | "Milk 200mL" |  "GBP"   | "EUR"          | "£1.00" | "mL"  | 200     | "£0.50 / 100 ml"  |
